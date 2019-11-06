@@ -1,0 +1,12 @@
+C:\Users\Juan José Ramos\Documents\USAC\2.Segundo Año\CUARTO SEMESTRE\LENGUAJES FORMALES\LFP_P2_TraductorC-Pyton\obj\Debug\LFP_P2_TraductorC-Pyton.csprojAssemblyReference.cache
+C:\Users\Juan José Ramos\Documents\USAC\2.Segundo Año\CUARTO SEMESTRE\LENGUAJES FORMALES\LFP_P2_TraductorC-Pyton\obj\Debug\LFP_P2_TraductorC_Pyton.Form1.resources
+C:\Users\Juan José Ramos\Documents\USAC\2.Segundo Año\CUARTO SEMESTRE\LENGUAJES FORMALES\LFP_P2_TraductorC-Pyton\obj\Debug\LFP_P2_TraductorC_Pyton.Properties.Resources.resources
+C:\Users\Juan José Ramos\Documents\USAC\2.Segundo Año\CUARTO SEMESTRE\LENGUAJES FORMALES\LFP_P2_TraductorC-Pyton\obj\Debug\LFP_P2_TraductorC-Pyton.csproj.GenerateResource.cache
+C:\Users\Juan José Ramos\Documents\USAC\2.Segundo Año\CUARTO SEMESTRE\LENGUAJES FORMALES\LFP_P2_TraductorC-Pyton\obj\Debug\LFP_P2_TraductorC-Pyton.csproj.CoreCompileInputs.cache
+C:\Users\Juan José Ramos\Documents\USAC\2.Segundo Año\CUARTO SEMESTRE\LENGUAJES FORMALES\LFP_P2_TraductorC-Pyton\bin\Debug\LFP_P2_TraductorC-Pyton.exe.config
+C:\Users\Juan José Ramos\Documents\USAC\2.Segundo Año\CUARTO SEMESTRE\LENGUAJES FORMALES\LFP_P2_TraductorC-Pyton\bin\Debug\LFP_P2_TraductorC-Pyton.exe
+C:\Users\Juan José Ramos\Documents\USAC\2.Segundo Año\CUARTO SEMESTRE\LENGUAJES FORMALES\LFP_P2_TraductorC-Pyton\bin\Debug\LFP_P2_TraductorC-Pyton.pdb
+C:\Users\Juan José Ramos\Documents\USAC\2.Segundo Año\CUARTO SEMESTRE\LENGUAJES FORMALES\LFP_P2_TraductorC-Pyton\bin\Debug\MaterialSkin.dll
+C:\Users\Juan José Ramos\Documents\USAC\2.Segundo Año\CUARTO SEMESTRE\LENGUAJES FORMALES\LFP_P2_TraductorC-Pyton\obj\Debug\LFP_P2_TraductorC-Pyton.csproj.CopyComplete
+C:\Users\Juan José Ramos\Documents\USAC\2.Segundo Año\CUARTO SEMESTRE\LENGUAJES FORMALES\LFP_P2_TraductorC-Pyton\obj\Debug\LFP_P2_TraductorC-Pyton.exe
+C:\Users\Juan José Ramos\Documents\USAC\2.Segundo Año\CUARTO SEMESTRE\LENGUAJES FORMALES\LFP_P2_TraductorC-Pyton\obj\Debug\LFP_P2_TraductorC-Pyton.pdb
