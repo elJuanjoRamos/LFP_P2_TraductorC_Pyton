@@ -53,6 +53,7 @@
     <Compile Include="AnalizadorSint\AnalizadorSintactico.cs" />
     <Compile Include="Controladores\TablaTraduccionControlador.cs" />
     <Compile Include="Controladores\TokenControlador.cs" />
+    <Compile Include="Controladores\TraductorControlador.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>

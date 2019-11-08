@@ -63,7 +63,7 @@ namespace LFP_P2_TraductorC_Pyton.AnalizadorLex
                             }
 
                             //VERIFICA SI ES ESPACIO EN BLANCO O SALTO DE LINEA
-                            else if (c.Equals('\n'))
+                            else if (c.CompareTo('\n') ==0)
                             {
                                 opcion = 0;
                                 columna = 0;//COLUMNA 0
@@ -127,20 +127,10 @@ namespace LFP_P2_TraductorC_Pyton.AnalizadorLex
                                     i--;
                                     columna--;
                                 }
-                                /*if (c.Equals("'"))
-                                {
-                                    Console.WriteLine("entro");
-                                    columna++;
-                                    opcion = 11;
-                                    i--;
-                                    columna--;
-                                }*/
+                               
                                 else if (c.Equals(','))
                                 {
                                     TokenControlador.Instancia.agregarToken(fila, (columna - 1), c.ToString(), "S_Coma");
-                                    /*opcion = 5;
-                                    i--;
-                                    columna--;*/
                                 }
                                 else if (c.Equals('{'))
                                 {
@@ -241,7 +231,7 @@ namespace LFP_P2_TraductorC_Pyton.AnalizadorLex
                             {
                                 string[] reservadasC = { "class", "static", "void", "string", "args",
                                     "int", "new", "float", "char", "bool", "boolean", "if", "else",
-                                    "switch", "case", "break", "for",  "while", "null"};
+                                    "switch", "case", "break","default", "for",  "while", "null"};
 
                                 string[] reservadasMayus = { "Main", "Console", "WriteLine", "Count", "Length" };
 
@@ -420,7 +410,7 @@ namespace LFP_P2_TraductorC_Pyton.AnalizadorLex
                             else
                             {
                                 fila++; columna = 0;
-                                TokenControlador.Instancia.agregarToken(fila, (columna - auxiliar.Length), auxiliar, "ComentarioLinea");
+                                TokenControlador.Instancia.agregarToken(fila, (columna - auxiliar.Length), auxiliar +"\n", "ComentarioLinea");
                                 opcion = 0;
                                 auxiliar = "";
                             }
@@ -443,7 +433,7 @@ namespace LFP_P2_TraductorC_Pyton.AnalizadorLex
                             {
                                 auxiliar += c;
                                 opcion = 18;
-                                TokenControlador.Instancia.agregarToken(fila, (columna - auxiliar.Length), auxiliar, "ComentarioMultiLinea");
+                                TokenControlador.Instancia.agregarToken(fila, (columna - auxiliar.Length), auxiliar + "\n", "ComentarioMultiLinea");
                                 opcion = 0;
                                 auxiliar = "";
                             }

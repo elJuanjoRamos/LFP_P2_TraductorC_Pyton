@@ -19,26 +19,40 @@ namespace LFP_P2_TraductorC_Pyton.AnalizadorSint
         String tokenInicio = "";
         string identificadorFor = "";
 
-        
-        
+
+
         //-------TRADUCCIONES ---------
 
         //Variables variable
         string lexemaAuxiliar = "";
+        string variableDeclaracion = "";
 
         //Variables arreglo
-        string nombreArreglo = "";
-        string contenido = "";
-
+        string nombreArregloDeclarado = "";
+        string nombreArregloVacio = "";
+        string contenidoDeclarado = "";
+        string contenidoVacio = "";
+        //Variables for
+        string cadenaFor = "";
+        string cadenaFor2 = "";
+        string aumentoDism = "";
+        string variableDeclarada = "";
 
         //Variables console
+        string print = "";
+
+        //Variables if
+        string condicionIf = "";
 
 
         //Variables switch
         string tipoInicio = "";
-        string identInicio = "";
+        string variableSwitch = "";
+        string valorVariableSwitch = "";
+        string cuerpoSwitch = "";
+        string cuerpoCase = "";
         string tipoInicioAux = "";
-
+        int iteracionesSwitch = 0;
         //guarda el token actual para evitar cosas como console.writeline( + algo ) o  console.writeline(  algo + ) lo que daria error sintactico
         String tokenPrevio = "";
 
@@ -72,19 +86,14 @@ namespace LFP_P2_TraductorC_Pyton.AnalizadorSint
             this.tokenInicio = "";
             this.tok = ""; this.lex = "";
             this.tokenInicio = preAnalisis.Descripcion;
+            this.errorSintactico = false;
             Inicio();
         }
 
-
-
-
-
         public void Inicio()
         {
-
             ListaDeclaracion();
         }
-
 
         /**En casos donde se mande a llamar algun metodo al inicio se debe de averiguar si el token actual es parte de los 
         *   primeros del metodo que se esta llamando de lo contrario es error (a menos que se acepte epsilon)
@@ -94,7 +103,6 @@ namespace LFP_P2_TraductorC_Pyton.AnalizadorSint
         {
             string[] reservadasVariable = { "PR_int", "PR_float", "PR_char", "PR_bool", "PR_boolean", "PR_string" };
 
-            
             //Manda a llamar a metodo variable
             if (Array.Exists(reservadasVariable, element => element == preAnalisis.Descripcion))
             {
@@ -107,15 +115,31 @@ namespace LFP_P2_TraductorC_Pyton.AnalizadorSint
             else if (preAnalisis.Descripcion.Equals("PR_Console"))
             {
                 InicioConsole();
-            } else if (preAnalisis.Descripcion.Equals("PR_switch"))
+            }
+            else if (preAnalisis.Descripcion.Equals("PR_switch"))
             {
                 InicioSwitch();
-            } else if (preAnalisis.Descripcion.Equals("PR_class"))
+            }
+            else if (preAnalisis.Descripcion.Equals("PR_class"))
             {
                 Clase();
-            } else if (preAnalisis.Descripcion.Equals("PR_if"))
+            }
+            else if (preAnalisis.Descripcion.Equals("PR_if"))
             {
-                InicioIf();
+                InicioIf2();
+            }
+            else if (preAnalisis.Descripcion.Equals("PR_while"))
+            {
+                InicioWhile();
+            }
+            else if (preAnalisis.Descripcion.Equals("ComentarioLinea"))
+            {
+                ComentarioLinea();
+            }
+            else if (preAnalisis.Descripcion.Equals("ComentarioMultiLinea"))
+            {
+                Console.WriteLine("entrada " +  preAnalisis.Descripcion);
+                ComentarioMultiLinea();
             }
             else
             {
@@ -123,10 +147,11 @@ namespace LFP_P2_TraductorC_Pyton.AnalizadorSint
                 //errorSintactico = true;
                 //Epsilon
             }
-
         }
 
-
+        /**
+         *  DECLARACION Y ASIGNACION
+         */
         #region DECLARACION Y ASIGNACION DE VARIABLES 
 
         public void InicioVariable()
@@ -182,6 +207,7 @@ namespace LFP_P2_TraductorC_Pyton.AnalizadorSint
                 {
                     ListaId();
                     OpcAsignacion();
+                    //traduccion(variableDeclaracion + "\n");
                     PuntoComa();
                 }
             }
@@ -192,8 +218,8 @@ namespace LFP_P2_TraductorC_Pyton.AnalizadorSint
 
             if (preAnalisis.Descripcion.Equals("Identificador"))
             {
-                this.identInicio = preAnalisis.Lexema;
                 this.lexemaAuxiliar = preAnalisis.Lexema;
+                variableDeclaracion = lexemaAuxiliar;
                 Parea("Identificador");
                 ListaId1();
             }
@@ -234,17 +260,20 @@ namespace LFP_P2_TraductorC_Pyton.AnalizadorSint
         {
             if (preAnalisis.Descripcion.Equals("Digito") && (tokenInicio.Equals("PR_int") || tokenInicio.Equals("PR_float")))
             {
-                LlenarTabla(this.lexemaAuxiliar, preAnalisis.Lexema, "variable");
+                variableDeclaracion = variableDeclaracion + " = " + preAnalisis.Lexema; 
+                valorVariableSwitch = valorVariableSwitch + " = " + preAnalisis.Lexema; 
                 Parea("Digito");
             }
             else if (preAnalisis.Descripcion.Equals("Cadena") && (tokenInicio.Equals("PR_char") || tokenInicio.Equals("PR_string")))
             {
-                LlenarTabla(this.lexemaAuxiliar, preAnalisis.Lexema, "variable");
+                variableDeclaracion = variableDeclaracion + " = " + preAnalisis.Lexema;
+                valorVariableSwitch = valorVariableSwitch + " = " + preAnalisis.Lexema;
                 Parea("Cadena");
             }
             else if (preAnalisis.Descripcion.Equals("Identificador") && (tokenInicio.Equals("PR_bool") || tokenInicio.Equals("PR_boolean")))
             {
-                LlenarTabla(this.lexemaAuxiliar, preAnalisis.Lexema, "variable");
+                variableDeclaracion = variableDeclaracion + " = " + preAnalisis.Lexema;
+                valorVariableSwitch = valorVariableSwitch + " = " + preAnalisis.Lexema;
                 Parea("Identificador");
             }
             else
@@ -262,8 +291,10 @@ namespace LFP_P2_TraductorC_Pyton.AnalizadorSint
                 Parea("S_Punto_y_Coma");
                 if (preAnalisis.Descripcion.Equals("PR_switch"))
                 {
+                    this.variableSwitch = this.lexemaAuxiliar;
                     InicioSwitch();
-                } else
+                }
+                else
                 {
                     ListaDeclaracion();
                 }
@@ -282,14 +313,12 @@ namespace LFP_P2_TraductorC_Pyton.AnalizadorSint
                 errorSintactico = true;
             }
         }
-
-
-
         #endregion
 
-
+        /**
+         *  DECLARACION ARREGLO
+         */
         #region DECLARACION DE ARREGLO
-
         // viene de la declaracion de variable
         public void DeclararArreglo()
         {
@@ -310,7 +339,7 @@ namespace LFP_P2_TraductorC_Pyton.AnalizadorSint
         {
             if (preAnalisis.Descripcion.Equals("Identificador"))
             {
-                this.nombreArreglo = preAnalisis.Lexema;
+                this.nombreArregloDeclarado = preAnalisis.Lexema;
                 Parea("Identificador");
             }
             else
@@ -343,20 +372,23 @@ namespace LFP_P2_TraductorC_Pyton.AnalizadorSint
             {
                 Parea("S_Llave_Izquierda");
                 ListaValor();
-                LlenarTabla(this.nombreArreglo, this.contenido , "arreglo");
-                if (preAnalisis.Descripcion.Equals("S_Llave_Derecha"))
-                {
-                    Parea("S_Llave_Derecha");
-                    PuntoComa();
-                    ListaDeclaracion();
-                }
-                else
-                {
-                    this.lex = ">>Error sintactico: Se esperaba Llave de cierre en lugar de [" + preAnalisis.Descripcion + ", " + preAnalisis.Lexema + "]";
-                    this.tok = "";
-                    errorSintactico = true;
-                }
 
+                if (errorSintactico == false)
+                {
+                    if (preAnalisis.Descripcion.Equals("S_Llave_Derecha"))
+                    {
+                        Parea("S_Llave_Derecha");
+                        PuntoComa();
+                        //traduccion(nombreArregloDeclarado + " = " + contenidoDeclarado + " \n");
+                        ListaDeclaracion();
+                    }
+                    else
+                    {
+                        this.lex = ">>Error sintactico: Se esperaba Llave de cierre en lugar de [" + preAnalisis.Descripcion + ", " + preAnalisis.Lexema + "]";
+                        this.tok = "";
+                        errorSintactico = true;
+                    }
+                }
             }
             else if (preAnalisis.Descripcion.Equals("PR_new"))
             {
@@ -379,10 +411,11 @@ namespace LFP_P2_TraductorC_Pyton.AnalizadorSint
                 ||
                 (preAnalisis.Descripcion.Equals("Identificador") && (tokenInicio.Equals("PR_bool") || tokenInicio.Equals("PR_boolean"))))
             {
-                this.contenido = "[" + preAnalisis.Lexema; 
+                this.contenidoDeclarado = "[" + preAnalisis.Lexema;
                 Parea(preAnalisis.Descripcion);
                 ListaValor1();
-                this.contenido = this.contenido + "]";
+                this.contenidoDeclarado = this.contenidoDeclarado + "]";
+
             }
             else
             {
@@ -400,19 +433,19 @@ namespace LFP_P2_TraductorC_Pyton.AnalizadorSint
 
                 if (preAnalisis.Descripcion.Equals("Digito") && (tokenInicio.Equals("PR_int") || tokenInicio.Equals("PR_float")))
                 {
-                    this.contenido = this.contenido + "," + preAnalisis.Lexema;
+                    this.contenidoDeclarado = this.contenidoDeclarado + "," + preAnalisis.Lexema;
                     Parea("Digito");
                     ListaValor1();
                 }
                 else if (preAnalisis.Descripcion.Equals("Cadena") && ((tokenInicio.Equals("PR_char") || tokenInicio.Equals("PR_string"))))
                 {
-                    this.contenido = this.contenido + "," + preAnalisis.Lexema;
+                    this.contenidoDeclarado = this.contenidoDeclarado + "," + preAnalisis.Lexema;
                     Parea("Cadena");
                     ListaValor1();
                 }
                 else if (preAnalisis.Descripcion.Equals("Identificador") && ((tokenInicio.Equals("PR_bool") || tokenInicio.Equals("PR_boolean"))))
                 {
-                    this.contenido = this.contenido + "," + preAnalisis.Lexema;
+                    this.contenidoDeclarado = this.contenidoDeclarado + "," + preAnalisis.Lexema;
                     Parea("Identificador");
                     ListaValor1();
                 }
@@ -443,11 +476,9 @@ namespace LFP_P2_TraductorC_Pyton.AnalizadorSint
                     if (preAnalisis.Descripcion.Equals("S_Corchete_Derecho"))
                     {
                         Parea("S_Corchete_Derecho");
-                        this.contenido = "[]";
-                        LlenarTabla(this.nombreArreglo, this.contenido, "arreglo");
-
                         PuntoComa();
-
+                        //traduccion(nombreArregloDeclarado + " = [] \n");
+                        ListaDeclaracion();
                     }
                     else
                     {
@@ -470,15 +501,17 @@ namespace LFP_P2_TraductorC_Pyton.AnalizadorSint
                 errorSintactico = true;
             }
         }
-
         #endregion
 
-
+        /**
+         *  DECLARACION FOR
+         */
         #region DECLARACION FOR 
 
 
         public void InicioFor()
         {
+            cadenaFor = "";
             Parea(preAnalisis.Descripcion);
             if (preAnalisis.Descripcion.Equals("S_Parentesis_Izquierdo"))
             {
@@ -500,16 +533,25 @@ namespace LFP_P2_TraductorC_Pyton.AnalizadorSint
                 Parea("PR_int");
                 if (preAnalisis.Descripcion.Equals("Identificador"))
                 {
+                    variableDeclarada = preAnalisis.Lexema;
+
+                    cadenaFor = cadenaFor + " "  + variableDeclarada;
                     identificadorFor = preAnalisis.Lexema;
                     Parea("Identificador");
                     if (preAnalisis.Descripcion.Equals("S_Igual"))
                     {
+                        //variableDeclarada = variableDeclarada + "=";
+                        cadenaFor = cadenaFor + " " + preAnalisis.Lexema;
+
                         Parea("S_Igual");
                         if (preAnalisis.Descripcion.Equals("Digito"))
                         {
                             try
                             {
                                 int.Parse(preAnalisis.Lexema);
+                                cadenaFor = cadenaFor + " " + preAnalisis.Lexema + "\n";
+                               // traduccion(cadenaFor);
+                                
                                 Parea(preAnalisis.Descripcion);
                                 if (preAnalisis.Descripcion.Equals("S_Punto_y_Coma"))
                                 {
@@ -564,15 +606,24 @@ namespace LFP_P2_TraductorC_Pyton.AnalizadorSint
         {
             if (identificadorFor.Equals(preAnalisis.Lexema))
             {
+                cadenaFor = "while " + preAnalisis.Lexema;
                 Parea(preAnalisis.Descripcion);
                 if (preAnalisis.Descripcion.Equals("S_Menor_Que") || preAnalisis.Descripcion.Equals("S_Mayor_Que"))
                 {
+                    cadenaFor = cadenaFor + " " + preAnalisis.Lexema;
                     Parea(preAnalisis.Descripcion);
+                    if (preAnalisis.Lexema.Equals("="))
+                    {
+                        cadenaFor = cadenaFor + " " + preAnalisis.Lexema;
+                        Parea("S_Igual");
+                    }
                     if (preAnalisis.Descripcion.Equals("Digito"))
                     {
                         try
                         {
                             int.Parse(preAnalisis.Lexema);
+                            cadenaFor = cadenaFor + " " + preAnalisis.Lexema + ":";
+                            //traduccion(cadenaFor);
                             Parea("Digito");
                             if (preAnalisis.Descripcion.Equals("S_Punto_y_Coma"))
                             {
@@ -608,7 +659,6 @@ namespace LFP_P2_TraductorC_Pyton.AnalizadorSint
                         //Aqui vendria la parte de evaluar si lo que viene es el tamaño de un array, es decir array.count
                     } /*else if (true)
                         {
-
                         }*/
                     else
                     {
@@ -633,7 +683,6 @@ namespace LFP_P2_TraductorC_Pyton.AnalizadorSint
             }
         }
 
-
         public void SimboloIncrementoDecremento()
         {
             if (preAnalisis.Descripcion.Equals("S_Suma"))
@@ -641,6 +690,8 @@ namespace LFP_P2_TraductorC_Pyton.AnalizadorSint
                 Parea("S_Suma");
                 if (preAnalisis.Descripcion.Equals("S_Suma"))
                 {
+                    aumentoDism = "\n" + variableDeclarada + " += 1" + "\n";
+                    //traduccion(aumentoDism);
                     Parea("S_Suma");
                     if (preAnalisis.Descripcion.Equals("S_Parentesis_Derecho"))
                     {
@@ -650,10 +701,12 @@ namespace LFP_P2_TraductorC_Pyton.AnalizadorSint
                             Parea("S_Llave_Izquierda");
                             //Esto es lo que va a contener el for
                             ListaDeclaracion();
+                            
                             if (errorSintactico != true)
                             {
                                 if (preAnalisis.Descripcion.Equals("S_Llave_Derecha"))
                                 {
+
                                     Parea("S_Llave_Derecha");
                                     ListaDeclaracion();
                                 }
@@ -691,6 +744,8 @@ namespace LFP_P2_TraductorC_Pyton.AnalizadorSint
                 Parea("S_Resta");
                 if (preAnalisis.Descripcion.Equals("S_Resta"))
                 {
+                    aumentoDism = "\n"+variableDeclarada + " -= 1";
+                   // traduccion(aumentoDism);
                     Parea("S_Resta");
                     if (preAnalisis.Descripcion.Equals("S_Parentesis_Derecho"))
                     {
@@ -744,13 +799,11 @@ namespace LFP_P2_TraductorC_Pyton.AnalizadorSint
                 errorSintactico = true;
             }
         }
-
-
-
-
         #endregion
 
-
+        /**
+         * CONSOLE WRITELINE
+         */
         #region IMPRIMIR EN PANTALLA
         public void InicioConsole()
         {
@@ -765,8 +818,10 @@ namespace LFP_P2_TraductorC_Pyton.AnalizadorSint
                     {
                         Parea(preAnalisis.Descripcion);
                         this.tokenPrevio = preAnalisis.Descripcion;
+                        print = print + "print(";
                         CuerpoConsole();
-
+                        print = print + ")";
+                       // LlenarTabla(print, "", "print");
                         if (errorSintactico == false)
                         {
                             if (preAnalisis.Descripcion.Equals("S_Parentesis_Derecho"))
@@ -805,11 +860,15 @@ namespace LFP_P2_TraductorC_Pyton.AnalizadorSint
 
             if (preAnalisis.Descripcion.Equals("Digito") || preAnalisis.Descripcion.Equals("Identificador") || preAnalisis.Descripcion.Equals("Cadena"))
             {
+                print = print + preAnalisis.Lexema;
                 Parea(preAnalisis.Descripcion);
                 if (preAnalisis.Descripcion.Equals("S_Suma"))
                 {
+                    print = print + preAnalisis.Lexema;
                     CuerpoConsole();
-                } else if (preAnalisis.Descripcion.Equals("Digito") || preAnalisis.Descripcion.Equals("Identificador") || preAnalisis.Descripcion.Equals("Cadena"))
+
+                }
+                else if (preAnalisis.Descripcion.Equals("Digito") || preAnalisis.Descripcion.Equals("Identificador") || preAnalisis.Descripcion.Equals("Cadena"))
                 {
                     this.lex = "Error Sintactico: Se esperaba signo mas enlugar de [" + preAnalisis.Descripcion + "]";
                     errorSintactico = true;
@@ -824,9 +883,11 @@ namespace LFP_P2_TraductorC_Pyton.AnalizadorSint
             {
                 if (tokenPrevio != "S_Suma" && tokenPrevio != "")
                 {
+                    print = print + preAnalisis.Lexema;
                     Parea(preAnalisis.Descripcion);
                     if (preAnalisis.Descripcion.Equals("Digito") || preAnalisis.Descripcion.Equals("Identificador") || preAnalisis.Descripcion.Equals("Cadena"))
                     {
+                        print = print + preAnalisis.Lexema;
                         Parea(preAnalisis.Descripcion);
                         CuerpoConsole();
                     }
@@ -847,13 +908,12 @@ namespace LFP_P2_TraductorC_Pyton.AnalizadorSint
 
             }
         }
-
         #endregion
 
-
-
-        #region DECLARACION SWTICH 
-
+        /**
+         * METODO SWITCH
+         */
+        #region DECLARACION SWITCH 
         public void InicioSwitch()
         {
             this.tipoInicioAux = tipoInicio;
@@ -871,45 +931,51 @@ namespace LFP_P2_TraductorC_Pyton.AnalizadorSint
                         {
                             Parea(preAnalisis.Descripcion);
                             CuerpoSwitch();
-                            if (errorSintactico == false )
+                            if (errorSintactico == false)
                             {
                                 if (preAnalisis.Descripcion.Equals("S_Llave_Derecha"))
                                 {
                                     Parea(preAnalisis.Descripcion);
                                     ListaDeclaracion();
-                                } else
+                                }
+                                else
                                 {
                                     this.lex = ">>Error sintactico: Se esperaba llave de cierre en lugar de [" + preAnalisis.Descripcion + ", " + preAnalisis.Lexema + "]";
                                     this.tok = "";
                                     errorSintactico = true;
                                 }
-                            } 
-                        } else
+                            }
+                        }
+                        else
                         {
                             this.lex = ">>Error sintactico: Se esperaba llave de apertura en lugar de [" + preAnalisis.Descripcion + ", " + preAnalisis.Lexema + "]";
                             this.tok = "";
                             errorSintactico = true;
                         }
-                    } else
+                    }
+                    else
                     {
                         this.lex = ">>Error sintactico: Se esperaba parentesis de cierre en lugar de [" + preAnalisis.Descripcion + ", " + preAnalisis.Lexema + "]";
                         this.tok = "";
                         errorSintactico = true;
                     }
                 }
-            } else
+            }
+            else
             {
                 this.lex = ">>Error sintactico: Se esperaba parentesis de apertura en lugar de [ " + preAnalisis.Descripcion + ", " + preAnalisis.Lexema + " ]";
                 this.tok = "";
                 errorSintactico = true;
             }
-            
+
 
         }
         public void AsignacionSwitch()
         {
-            if (preAnalisis.Lexema.Equals(identInicio))
+            if (preAnalisis.Lexema.Equals(variableSwitch))
             {
+                //Envia a la traduccion
+                //traduccion(variableSwitch + " " + valorVariableSwitch + "\n");
                 Parea(preAnalisis.Descripcion);
             }
             else
@@ -924,6 +990,11 @@ namespace LFP_P2_TraductorC_Pyton.AnalizadorSint
         {
             if (preAnalisis.Descripcion.Equals("PR_case"))
             {
+                //va armando la traduccion del switch
+                if (iteracionesSwitch == 0) { cuerpoSwitch = cuerpoCase + " if " + variableSwitch; iteracionesSwitch = 1; }
+                else { cuerpoSwitch = cuerpoCase + "else if " + variableSwitch; }
+
+
                 Parea(preAnalisis.Descripcion);
                 //verifica si concuerdan los tipos, es decir que el caso a analizar concuerde con el tipo de variable
                 //
@@ -932,14 +1003,20 @@ namespace LFP_P2_TraductorC_Pyton.AnalizadorSint
                 //  switch(texto){
                 //      case "":  ---> la variable del case debe ser igual a string   
                 //
-                if ( (preAnalisis.Descripcion.Equals("Cadena") && (tipoInicio.Equals("PR_string") || tipoInicio.Equals("PR_char"))) ||
+                if ((preAnalisis.Descripcion.Equals("Cadena") && (tipoInicio.Equals("PR_string") || tipoInicio.Equals("PR_char"))) ||
                     (preAnalisis.Descripcion.Equals("Digito") && (tipoInicio.Equals("PR_int") || tipoInicio.Equals("PR_float"))))
                 {
+                    cuerpoSwitch = cuerpoSwitch + " == " + preAnalisis.Lexema;
                     Parea(preAnalisis.Descripcion);
                     if (preAnalisis.Descripcion.Equals("S_Dos_puntos"))
                     {
+                        cuerpoSwitch = cuerpoSwitch + ":";
                         Parea(preAnalisis.Descripcion);
                         CuerpoCase();
+
+
+                        //envia a la traduccion
+                      //  traduccion(cuerpoSwitch  + "\n" + cuerpoCase);
                         if (errorSintactico == false)
                         {
                             if (preAnalisis.Descripcion.Equals("PR_break"))
@@ -962,20 +1039,66 @@ namespace LFP_P2_TraductorC_Pyton.AnalizadorSint
                                 this.lex = ">>Error Sintactico: Se esperaban palabra reservada BREAK en lugar de [" + preAnalisis.Descripcion + " ]";
                                 this.tok = "";
                                 errorSintactico = true;
-                            }  
+                            }
                         }
-                    } else
+                    }
+                    else
                     {
                         this.lex = ">>Error Sintactico: Se esperaban dos puntos el lugar de [" + preAnalisis.Descripcion + " ]";
                         this.tok = "";
                         errorSintactico = true;
                     }
-                } else
+                }
+                else
                 {
-                    this.lex = ">>Error Sintactico: El tipo de variable [ " + tipoInicio+ "] no concuerda con el tipo de evaluacion [ " + preAnalisis.Descripcion + " ] del case";
+                    this.lex = ">>Error Sintactico: El tipo de variable [ " + tipoInicio + "] no concuerda con el tipo de evaluacion [ " + preAnalisis.Descripcion + " ] del case";
                     this.tok = "";
                     errorSintactico = true;
                 }
+            }
+            else if (preAnalisis.Descripcion.Equals("PR_default"))
+            {
+                Parea(preAnalisis.Descripcion);
+
+                if (preAnalisis.Descripcion.Equals("S_Dos_puntos"))
+                {
+                    cuerpoSwitch = "else" + ":";
+                    Parea(preAnalisis.Descripcion);
+                    ListaDeclaracion();
+                    //envia a la traduccion
+                    //traduccion(cuerpoSwitch + "\n" + cuerpoCase);
+                    if (errorSintactico == false)
+                    {
+                        if (preAnalisis.Descripcion.Equals("PR_break"))
+                        {
+                            Parea(preAnalisis.Descripcion);
+                            if (preAnalisis.Descripcion.Equals("S_Punto_y_Coma"))
+                            {
+                                Parea(preAnalisis.Descripcion);
+                                CuerpoSwitch();
+                            }
+                            else
+                            {
+                                this.lex = ">>Error Sintactico: Se esperaban punto y coma en lugar de [" + preAnalisis.Descripcion + " ]";
+                                this.tok = "";
+                                errorSintactico = true;
+                            }
+                        }
+                        else
+                        {
+                            this.lex = ">>Error Sintactico: Se esperaban palabra reservada BREAK en lugar de [" + preAnalisis.Descripcion + " ]";
+                            this.tok = "";
+                            errorSintactico = true;
+                        }
+                    }
+                }
+                else
+                {
+                    this.lex = ">>Error Sintactico: Se esperaban dos puntos el lugar de [" + preAnalisis.Descripcion + " ]";
+                    this.tok = "";
+                    errorSintactico = true;
+                }
+
             }
             else if (preAnalisis.Descripcion.Equals("S_Llave_Derecha"))
             {
@@ -991,42 +1114,14 @@ namespace LFP_P2_TraductorC_Pyton.AnalizadorSint
 
         public void CuerpoCase()
         {
-            if (preAnalisis.Descripcion.Equals("PR_for"))
-            {
-                InicioFor();
-            } else if (preAnalisis.Descripcion.Equals("PR_int") || preAnalisis.Descripcion.Equals("PR_string") 
-                || preAnalisis.Descripcion.Equals("PR_float") || preAnalisis.Descripcion.Equals("PR_bool")
-                || preAnalisis.Descripcion.Equals("PR_boolean") || preAnalisis.Descripcion.Equals("PR_char"))
-            {
-                InicioVariable();
-                tipoInicio = tipoInicioAux;
-            }
-            // esto sirve por si la variable ya fue declarada anteriormente
-            // y se quiere modificar su valor o algo asi
-
-            // int variable;
-
-
-            // switch(condicion)
-            // case 0:
-            //       variable = 0;
-            // case 1: 
-            //       variable  = 1; 
-            // etc
-            else if (preAnalisis.Descripcion.Equals("Identificador"))
-            {
-
-            }
-            else
-            {
-                //Epsilon
-            }
+            ListaDeclaracion();
 
         }
         #endregion
 
-
-
+        /**
+         * CLASE Y METODO PRINCIPAL
+         */
         #region  CLASE Y METODO PRINCIPAL
         public void Clase()
         {
@@ -1042,7 +1137,9 @@ namespace LFP_P2_TraductorC_Pyton.AnalizadorSint
                         /**
                          * LLAMADA AL METODO PRINCIPAL 
                          */
+                        ListaDeclaracion();
                         MetodoPrincipal();
+                        ListaDeclaracion();
                         if (preAnalisis.Descripcion.Equals("S_Llave_Derecha"))
                         {
                             Parea("S_Llave_Derecha");
@@ -1222,45 +1319,49 @@ namespace LFP_P2_TraductorC_Pyton.AnalizadorSint
                 // viene epsilon
             }
         }
-
         #endregion
 
-        #region METODO IF-ELSE
         /**
-         * METODO IF
-         **/
-        public void InicioIf()
+         * DECLARACION IF  -ELSE
+         */
+        #region DECLARACION IF
+        public void InicioIf2()
         {
             if (preAnalisis.Descripcion.Equals("PR_if"))
             {
                 Parea("PR_if");
-                this.Condicion();
-                this.Entonces();
-            }
-            else
-            {
-
-            }
-        }
-
-        public void Condicion()
-        {
-            if (preAnalisis.Descripcion.Equals("S_Parentesis_Izquierdo"))
-            {
-                Parea("S_Parentesis_Izquierdo");
-                if (preAnalisis.Descripcion.Equals("Identificador"))
+                if (preAnalisis.Descripcion.Equals("S_Parentesis_Izquierdo"))
                 {
-                    Parea("Identificador");
+                    Parea("S_Parentesis_Izquierdo");
                     /**
-                     * COMPARAR SIMBOLO DE IF 
+                     * CONDICION
                      */
-                    this.SimboloIf();
-                    if (preAnalisis.Descripcion.Equals("Identificador"))
+                    CondicionIf();
+                    if (preAnalisis.Descripcion.Equals("S_Parentesis_Derecho"))
                     {
-                        Parea("Identificador");
-                        if (preAnalisis.Descripcion.Equals("S_Parentesis_Derecho"))
+                        Parea("S_Parentesis_Derecho");
+                        if (preAnalisis.Descripcion.Equals("S_Llave_Izquierda"))
                         {
-                            Parea("S_Parentesis_Derecho");
+                            Parea("S_Llave_Izquierda");
+                            /**
+                             * CUERPO DE IF 
+                             */
+                            ListaDeclaracion();
+                            if (preAnalisis.Descripcion.Equals("S_Llave_Derecha"))
+                            {
+                                Parea("S_Llave_Derecha");
+                                /**
+                                 * ELSE IF 
+                                 */
+                                ElseIf();
+                            }
+                            else
+                            {
+                                Console.WriteLine("error");
+                                // viene epsilon
+                                this.lex = ">>Error sintactico: Se esperaba llave de cierre en lugar de [" + preAnalisis.Descripcion + ", " + preAnalisis.Lexema + "]";
+                                errorSintactico = true;
+                            }
                         }
                         else
                         {
@@ -1268,7 +1369,7 @@ namespace LFP_P2_TraductorC_Pyton.AnalizadorSint
                             {
                                 Console.WriteLine("error");
                                 // viene epsilon
-                                this.lex = ">>Error sintactico: Se esperaba un parentesis de cierre en lugar de [" + preAnalisis.Descripcion + ", " + preAnalisis.Lexema + "]";
+                                this.lex = ">>Error sintactico: Se esperaba llave de apertura en lugar de [" + preAnalisis.Descripcion + ", " + preAnalisis.Lexema + "]";
                                 errorSintactico = true;
                             }
                         }
@@ -1279,7 +1380,7 @@ namespace LFP_P2_TraductorC_Pyton.AnalizadorSint
                         {
                             Console.WriteLine("error");
                             // viene epsilon
-                            this.lex = ">>Error sintactico: Se esperaba un identificador en lugar de [" + preAnalisis.Descripcion + ", " + preAnalisis.Lexema + "]";
+                            this.lex = ">>Error sintactico: Se esperaba parentesis de cierre en lugar de [" + preAnalisis.Descripcion + ", " + preAnalisis.Lexema + "]";
                             errorSintactico = true;
                         }
                     }
@@ -1290,7 +1391,48 @@ namespace LFP_P2_TraductorC_Pyton.AnalizadorSint
                     {
                         Console.WriteLine("error");
                         // viene epsilon
-                        this.lex = ">>Error sintactico: Se esperaba un identificador en lugar de [" + preAnalisis.Descripcion + ", " + preAnalisis.Lexema + "]";
+                        this.lex = ">>Error sintactico: Se esperaba parentesis de apertura de cierre en lugar de [" + preAnalisis.Descripcion + ", " + preAnalisis.Lexema + "]";
+                        errorSintactico = true;
+                    }
+                }
+            }
+            else
+            {
+
+            }
+        }
+
+        public void CondicionIf()
+        {
+            string simboloEvaluar = "";
+            if (preAnalisis.Descripcion.Equals("Identificador") || preAnalisis.Descripcion.Equals("Digito") || preAnalisis.Descripcion.Equals("Cadena"))
+            {
+                condicionIf = condicionIf + preAnalisis.Lexema;
+                simboloEvaluar = preAnalisis.Descripcion;
+                Parea(preAnalisis.Descripcion);
+                /**
+                 * SIMBOLOS DE INCREMENTO 
+                 */
+                SimbolosIf();
+                if ((preAnalisis.Descripcion.Equals("Identificador") && simboloEvaluar.Equals("Identificador"))
+                    || (preAnalisis.Descripcion.Equals("Identificador") && simboloEvaluar.Equals("Digito"))
+                    || (preAnalisis.Descripcion.Equals("Identificador") && simboloEvaluar.Equals("Cadena"))
+                    || (preAnalisis.Descripcion.Equals("Digito") && simboloEvaluar.Equals("Identificador"))
+                    || (preAnalisis.Descripcion.Equals("Digito") && simboloEvaluar.Equals("Digito"))
+                    || (preAnalisis.Descripcion.Equals("Cadena") && simboloEvaluar.Equals("Identificador"))
+                    || (preAnalisis.Descripcion.Equals("Cadena") && simboloEvaluar.Equals("Cadena")))
+                {
+                    condicionIf = condicionIf + preAnalisis.Lexema + ":";
+                    condicionIf = "";
+                    Parea(preAnalisis.Descripcion);
+                }
+                else
+                {
+                    if (!errorSintactico)
+                    {
+                        Console.WriteLine("error");
+                        // viene epsilon
+                        this.lex = ">>Error sintactico: Se esperaba "+ simboloEvaluar +" en lugar de [" + preAnalisis.Descripcion + ", " + preAnalisis.Lexema + "]";
                         errorSintactico = true;
                     }
                 }
@@ -1301,13 +1443,311 @@ namespace LFP_P2_TraductorC_Pyton.AnalizadorSint
                 {
                     Console.WriteLine("error");
                     // viene epsilon
-                    this.lex = ">>Error sintactico: Se esperaba parentesis de apertura en lugar de [" + preAnalisis.Descripcion + ", " + preAnalisis.Lexema + "]";
+                    this.lex = ">>Error sintactico: Se esperaba Identificador en lugar de [" + preAnalisis.Descripcion + ", " + preAnalisis.Lexema + "]";
                     errorSintactico = true;
                 }
             }
         }
 
-        public void SimboloIf()
+        public void SimbolosIf()
+        {
+            Console.WriteLine(preAnalisis.Descripcion);
+            switch (preAnalisis.Descripcion)
+            {
+                case "S_Igual":
+                    if (preAnalisis.Descripcion.Equals("S_Igual"))
+                    {
+                        Parea("S_Igual");
+                        if (preAnalisis.Descripcion.Equals("S_Igual"))
+                        {
+                            condicionIf = condicionIf + "==";
+                            Parea("S_Igual");
+                        }
+                        else
+                        {
+                            if (!errorSintactico)
+                            {
+                                Console.WriteLine("error");
+                                // viene epsilon
+                                this.lex = ">>Error sintactico: Se esperaba el signo igual en lugar de [" + preAnalisis.Descripcion + ", " + preAnalisis.Lexema + "]";
+                                errorSintactico = true;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (!errorSintactico)
+                        {
+                            Console.WriteLine("error");
+                            // viene epsilon
+                            this.lex = ">>Error sintactico: Se esperaba el signo igual en lugar de [" + preAnalisis.Descripcion + ", " + preAnalisis.Lexema + "]";
+                            errorSintactico = true;
+                        }
+                    }
+                    break;
+                case "S_Mayor_Que":
+                    if (preAnalisis.Descripcion.Equals("S_Mayor_Que"))
+                    {
+                        condicionIf = condicionIf + preAnalisis.Lexema;
+                        Parea("S_Mayor_Que");
+                    }
+                    else
+                    {
+                        if (!errorSintactico)
+                        {
+                            Console.WriteLine("error");
+                            // viene epsilon
+                            this.lex = ">>Error sintactico: Se esperaba el signo igual en lugar de [" + preAnalisis.Descripcion + ", " + preAnalisis.Lexema + "]";
+                            errorSintactico = true;
+                        }
+                    }
+                    break;
+                case "S_Menor_Que":
+                    if (preAnalisis.Descripcion.Equals("S_Menor_Que"))
+                    {
+                        condicionIf = condicionIf + preAnalisis.Lexema;
+                        Parea("S_Menor_Que");
+                    }
+                    else
+                    {
+                        if (!errorSintactico)
+                        {
+                            Console.WriteLine("error");
+                            // viene epsilon
+                            this.lex = ">>Error sintactico: Se esperaba el signo igual en lugar de [" + preAnalisis.Descripcion + ", " + preAnalisis.Lexema + "]";
+                            errorSintactico = true;
+                        }
+                    }
+                    break;
+                case "S_Excl":
+                    if (preAnalisis.Descripcion.Equals("S_Excl"))
+                    {
+                        Parea("S_Excl");
+                        if (preAnalisis.Descripcion.Equals("S_Igual"))
+                        {
+                            condicionIf = condicionIf + "!=";
+                            Parea("S_Igual");
+                        }
+                        else
+                        {
+                            if (!errorSintactico)
+                            {
+                                Console.WriteLine("error");
+                                // viene epsilon
+                                this.lex = ">>Error sintactico: Se esperaba el signo igual en lugar de [" + preAnalisis.Descripcion + ", " + preAnalisis.Lexema + "]";
+                                errorSintactico = true;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (!errorSintactico)
+                        {
+                            Console.WriteLine("error");
+                            // viene epsilon
+                            this.lex = ">>Error sintactico: Se esperaba el signo igual en lugar de [" + preAnalisis.Descripcion + ", " + preAnalisis.Lexema + "]";
+                            errorSintactico = true;
+                        }
+                    }
+                    break;
+                default:
+                    this.lex = ">>Error sintactico: Se esperaba un operador en lugar de [" + preAnalisis.Descripcion + ", " + preAnalisis.Lexema + "]";
+                    errorSintactico = true;
+                    break;
+            }
+        }
+
+        public void ElseIf()
+        {
+            if (preAnalisis.Descripcion.Equals("PR_else"))
+            {
+                Parea("PR_else");
+                if (preAnalisis.Descripcion.Equals("S_Llave_Izquierda"))
+                {
+                    Parea("S_Llave_Izquierda");
+                    /**
+                     * CUERPO DE IF 
+                     */
+                    ListaDeclaracion();
+                    if (preAnalisis.Descripcion.Equals("S_Llave_Derecha"))
+                    {
+                        Parea("S_Llave_Derecha");
+                    }
+                    else
+                    {
+                        Console.WriteLine("error");
+                        // viene epsilon
+                        this.lex = ">>Error sintactico: Se esperaba llave de cierre en lugar de [" + preAnalisis.Descripcion + ", " + preAnalisis.Lexema + "]";
+                        errorSintactico = true;
+                    }
+                }
+                else
+                {
+                    if (!errorSintactico)
+                    {
+                        Console.WriteLine("error");
+                        // viene epsilon
+                        this.lex = ">>Error sintactico: Se esperaba llave de apertura en lugar de [" + preAnalisis.Descripcion + ", " + preAnalisis.Lexema + "]";
+                        errorSintactico = true;
+                    }
+                }
+            }
+            else
+            {
+
+            }
+        }
+        #endregion
+
+        /**
+         * COMENTARIOS  
+         */
+        #region COMENTARIOS
+
+
+        public void ComentarioLinea()
+        {
+            if (preAnalisis.Descripcion.Equals("ComentarioLinea"))
+            {
+                ///traduccionComentario(preAnalisis.Lexema, preAnalisis.Descripcion);
+                Parea("ComentarioLinea");
+                ListaDeclaracion();
+            }
+            else
+            {
+
+            }
+        }
+
+        public void ComentarioMultiLinea()
+        {
+            if (preAnalisis.Descripcion.Equals("ComentarioMultiLinea"))
+            {
+               // traduccionComentario(preAnalisis.Lexema, preAnalisis.Descripcion);
+                Parea(preAnalisis.Descripcion);
+                ListaDeclaracion();
+            }
+            else
+            {
+
+            }
+        }
+        #endregion
+
+        /**
+         * DECLARACION WHILE  
+         */
+        #region DECLARACION WHILE 
+        public void InicioWhile()
+        {
+            if (preAnalisis.Descripcion.Equals("PR_while"))
+            {
+                Parea("PR_while");
+                if (preAnalisis.Descripcion.Equals("S_Parentesis_Izquierdo"))
+                {
+                    Parea("S_Parentesis_Izquierdo");
+                    /**
+                     * CONDICION
+                     */
+                    CondicionWhile();
+                    if (preAnalisis.Descripcion.Equals("S_Parentesis_Derecho"))
+                    {
+                        Parea("S_Parentesis_Derecho");
+                        if (preAnalisis.Descripcion.Equals("S_Llave_Izquierda"))
+                        {
+                            Parea("S_Llave_Izquierda");
+                            /**
+                             * CUERPO DE WHILE 
+                             */
+                            ListaDeclaracion();
+                            if (preAnalisis.Descripcion.Equals("S_Llave_Derecha"))
+                            {
+                                Parea("S_Llave_Derecha");
+                            }
+                            else
+                            {
+                                Console.WriteLine("error");
+                                // viene epsilon
+                                this.lex = ">>Error sintactico: Se esperaba llave de cierre en lugar de [" + preAnalisis.Descripcion + ", " + preAnalisis.Lexema + "]";
+                                errorSintactico = true;
+                            }
+                        }
+                        else
+                        {
+                            if (!errorSintactico)
+                            {
+                                Console.WriteLine("error");
+                                // viene epsilon
+                                this.lex = ">>Error sintactico: Se esperaba llave de apertura en lugar de [" + preAnalisis.Descripcion + ", " + preAnalisis.Lexema + "]";
+                                errorSintactico = true;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (!errorSintactico)
+                        {
+                            Console.WriteLine("error");
+                            // viene epsilon
+                            this.lex = ">>Error sintactico: Se esperaba parentesis de cierre en lugar de [" + preAnalisis.Descripcion + ", " + preAnalisis.Lexema + "]";
+                            errorSintactico = true;
+                        }
+                    }
+                }
+                else
+                {
+                    if (!errorSintactico)
+                    {
+                        Console.WriteLine("error");
+                        // viene epsilon
+                        this.lex = ">>Error sintactico: Se esperaba parentesis de apertura de cierre en lugar de [" + preAnalisis.Descripcion + ", " + preAnalisis.Lexema + "]";
+                        errorSintactico = true;
+                    }
+                }
+            }
+            else
+            {
+
+            }
+        }
+
+        public void CondicionWhile()
+        {
+            if (preAnalisis.Descripcion.Equals("Identificador"))
+            {
+                Parea("Identificador");
+                /**
+                 * SIMBOLOS DE INCREMENTO 
+                 */
+                SimbolosWhile();
+                if (preAnalisis.Descripcion.Equals("Identificador"))
+                {
+                    Parea("Identificador");
+                }
+                else
+                {
+                    if (!errorSintactico)
+                    {
+                        Console.WriteLine("error");
+                        // viene epsilon
+                        this.lex = ">>Error sintactico: Se esperaba Identificador en lugar de [" + preAnalisis.Descripcion + ", " + preAnalisis.Lexema + "]";
+                        errorSintactico = true;
+                    }
+                }
+            }
+            else
+            {
+                if (!errorSintactico)
+                {
+                    Console.WriteLine("error");
+                    // viene epsilon
+                    this.lex = ">>Error sintactico: Se esperaba Identificador en lugar de [" + preAnalisis.Descripcion + ", " + preAnalisis.Lexema + "]";
+                    errorSintactico = true;
+                }
+            }
+        }
+
+        public void SimbolosWhile()
         {
             Console.WriteLine(preAnalisis.Descripcion);
             switch (preAnalisis.Descripcion)
@@ -1410,140 +1850,7 @@ namespace LFP_P2_TraductorC_Pyton.AnalizadorSint
                     break;
             }
         }
-
-        public void Entonces()
-        {
-            if (preAnalisis.Descripcion.Equals("S_Llave_Izquierda"))
-            {
-                Parea("S_Llave_Izquierda");
-                /**
-                 * CUERPO DE IF 
-                 */
-                //this.CuerpoIf();
-                if (preAnalisis.Descripcion.Equals("S_Llave_Derecha"))
-                {
-                    Parea("S_Llave_Derecha");
-                }
-                else
-                {
-                    if (!errorSintactico)
-                    {
-                        Console.WriteLine("error");
-                        // viene epsilon
-                        this.lex = ">>Error sintactico: Se esperaba llave de cierre en lugar de [" + preAnalisis.Descripcion + ", " + preAnalisis.Lexema + "]";
-                        errorSintactico = true;
-                    }
-                }
-            }
-            else
-            {
-                if (!errorSintactico)
-                {
-                    Console.WriteLine("error");
-                    // viene epsilon
-                    this.lex = ">>Error sintactico: Se esperaba llave de apertural en lugar de [" + preAnalisis.Descripcion + ", " + preAnalisis.Lexema + "]";
-                    errorSintactico = true;
-                }
-            }
-        }
-
-        public void OtroModoIf()
-        {
-            if (preAnalisis.Descripcion.Equals("S_Division"))
-            {
-                Parea("S_Division");
-            }
-            else
-            {
-
-            }
-        }
-
-        public void CuerpoIf()
-        {
-            this.InstruccionIf();
-            this.OtraInstruccionIf();
-        }
-
-        public void InstruccionIf()
-        {
-            Console.WriteLine("Instruccion");
-        }
-
-        public void OtraInstruccionIf()
-        {
-            Console.WriteLine("Otra Instruccion");
-        }
         #endregion
-
-
-        /**
-         * COMENTARIOS  
-         */
-        #region COMENTARIOS
-        public void Comentario()
-        {
-            if (preAnalisis.Descripcion.Equals("ComentarioLinea"))
-            {
-                ComentarioLinea();
-            }
-            else if (preAnalisis.Descripcion.Equals("ComentarioMultiLinea"))
-            {
-                ComentarioMultilinea();
-            }
-            else
-            {
-
-            }
-        }
-
-        public void OtroComentario()
-        {
-            if (preAnalisis.Descripcion.Equals("ComentarioLinea"))
-            {
-                Comentario();
-            }
-            else if (preAnalisis.Descripcion.Equals("ComentarioMultiLinea"))
-            {
-                Comentario();
-            }
-            else
-            {
-
-            }
-        }
-
-        public void ComentarioLinea()
-        {
-            if (preAnalisis.Descripcion.Equals("ComentarioLinea"))
-            {
-                Parea("ComentarioLinea");
-                OtroComentario();
-            }
-            {
-                //EPSILON
-            }
-        }
-
-        public void ComentarioMultilinea()
-        {
-            if (preAnalisis.Descripcion.Equals("ComentarioMultiLinea"))
-            {
-                Parea("ComentarioMultiLinea");
-                OtroComentario();
-            }
-            {
-                //EPSILON
-            }
-        }
-
-        #endregion
-
-
-
-
-
-
 
         /**
     *   Parea
@@ -1552,7 +1859,6 @@ namespace LFP_P2_TraductorC_Pyton.AnalizadorSint
     * */
         string tok = " ";
         string lex = " ";
-        string temp = "";
         public void Parea(String tipoToken)
         {
             if (errorSintactico)
@@ -1603,10 +1909,39 @@ namespace LFP_P2_TraductorC_Pyton.AnalizadorSint
             }
         }
 
+
+       /* public void traduccionComentario(string cadena, string tipo)
+        {
+            if (tipo.Equals("ComentarioLinea"))
+            {
+                cadena = cadena.Replace("//", "#");
+            }
+            else if (tipo.Equals("ComentarioMultiLinea"))
+            {
+                cadena = cadena.Replace("/*", "' ' '");
+                cadena = cadena.Replace("", "' ' '" + "\n");
+           // }
+            //LlenarTabla(cadena, "", "comentario");
+
+        //}
+
+       /* ArrayList tokensTraducidos = new ArrayList();
+        int iteracionesFor = 0;
+        string finalFor = "";
+        public void traduccion(string cadena )
+        {
+            Console.WriteLine("la cadena es " + cadena);
+            tokensTraducidos.Add(cadena);
+        }
+        
+        public ArrayList getTokensTraducidos()
+        {
+            return this.tokensTraducidos;
+        }
+
         public void LlenarTabla(string lexAux, string lexema, string tipo)
         {
             TablaTraduccionControlador.Instancia.agregar(lexAux, lexema, tipo);
-        }
+        }*/
     }
-
 }

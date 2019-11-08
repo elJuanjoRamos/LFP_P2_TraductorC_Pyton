@@ -38,6 +38,9 @@ namespace LFP_P2_TraductorC_Pyton.Controladores
         {
             return this.tablaSimbolos;
         }
-
+        public void clearTabla()
+        {
+            tablaSimbolos.Clear();
+        }
     }
 }

@@ -42,15 +42,15 @@
             // 
             this.textAnalizar.Location = new System.Drawing.Point(34, 207);
             this.textAnalizar.Name = "textAnalizar";
-            this.textAnalizar.Size = new System.Drawing.Size(803, 330);
+            this.textAnalizar.Size = new System.Drawing.Size(862, 390);
             this.textAnalizar.TabIndex = 0;
             this.textAnalizar.Text = "";
             // 
             // consolaTexto
             // 
-            this.consolaTexto.Location = new System.Drawing.Point(34, 603);
+            this.consolaTexto.Location = new System.Drawing.Point(34, 642);
             this.consolaTexto.Name = "consolaTexto";
-            this.consolaTexto.Size = new System.Drawing.Size(803, 133);
+            this.consolaTexto.Size = new System.Drawing.Size(862, 159);
             this.consolaTexto.TabIndex = 1;
             this.consolaTexto.Text = "";
             // 
@@ -60,7 +60,7 @@
             this.materialLabel1.Depth = 0;
             this.materialLabel1.Font = new System.Drawing.Font("Roboto", 11F);
             this.materialLabel1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.materialLabel1.Location = new System.Drawing.Point(30, 567);
+            this.materialLabel1.Location = new System.Drawing.Point(30, 615);
             this.materialLabel1.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialLabel1.Name = "materialLabel1";
             this.materialLabel1.Size = new System.Drawing.Size(79, 24);
@@ -114,9 +114,9 @@
             // 
             // richTraduccion
             // 
-            this.richTraduccion.Location = new System.Drawing.Point(866, 200);
+            this.richTraduccion.Location = new System.Drawing.Point(922, 207);
             this.richTraduccion.Name = "richTraduccion";
-            this.richTraduccion.Size = new System.Drawing.Size(428, 536);
+            this.richTraduccion.Size = new System.Drawing.Size(523, 601);
             this.richTraduccion.TabIndex = 6;
             this.richTraduccion.Text = "";
             // 
@@ -126,7 +126,7 @@
             this.materialLabel3.Depth = 0;
             this.materialLabel3.Font = new System.Drawing.Font("Roboto", 11F);
             this.materialLabel3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.materialLabel3.Location = new System.Drawing.Point(862, 168);
+            this.materialLabel3.Location = new System.Drawing.Point(918, 168);
             this.materialLabel3.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialLabel3.Name = "materialLabel3";
             this.materialLabel3.Size = new System.Drawing.Size(104, 24);
@@ -137,7 +137,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1395, 794);
+            this.ClientSize = new System.Drawing.Size(1519, 863);
             this.Controls.Add(this.materialLabel3);
             this.Controls.Add(this.richTraduccion);
             this.Controls.Add(this.materialFlatButton1);

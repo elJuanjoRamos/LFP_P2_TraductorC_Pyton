@@ -23,6 +23,8 @@ namespace LFP_P2_TraductorC_Pyton
             InitializeComponent();
         }
 
+
+       
         private void Form1_Load(object sender, EventArgs e)
         {
 
@@ -31,47 +33,43 @@ namespace LFP_P2_TraductorC_Pyton
         private void Analizar_Click(object sender, EventArgs e)
         {
             TokenControlador.Instancia.clearListaTokens();
-
             AnalizadorLexico.Instancia.analizador_Lexico(textAnalizar.Text);
+            TraductorControlador.Instancia.clearTokensTraducidos();
+
             ArrayList a = TokenControlador.Instancia.getArrayListTokens();
 
 
+            Console.WriteLine(a.Count);
             ArrayList b = TokenControlador.Instancia.getArrayListErrors();
 
             if (b.Count == 0)
             {
 
                 AnalizadorSintactico.Instancia.obtenerLista(a);
+
+
+                TraductorControlador.Instancia.obtenerLista(a);
                 this.consolaTexto.Text = "";
                 this.consolaTexto.AppendText(AnalizadorSintactico.Instancia.returnT());
-
+                this.richTraduccion.Text = "";
+                richTraduccion.AppendText(TraductorControlador.Instancia.getTokensTraducidos());
             }
             else
             {
                 this.consolaTexto.AppendText("Exiten errores lexicos");
             }
         }
-
+        public string textoMostrar = "";
         private void MaterialFlatButton1_Click(object sender, EventArgs e)
         {
-            ArrayList ar = TablaTraduccionControlador.Instancia.getTabla();
+            /*ArrayList ar = TraductorControlador.Instancia.getTokensTraducidos();
 
-            Console.WriteLine("----------------------------------");
-            Console.WriteLine("ID  l      Lexema     l   Valor  ");
-            Console.WriteLine("----------------------------------");
             var cadena = "";
             for (int i = 0; i < ar.Count; i++)
             {
-                TablaTraduccion t = (TablaTraduccion)ar[i];
-                if (t.Tipo.Equals("variable") || t.Tipo.Equals("arreglo"))
-                {
-                    cadena = t.Lexema + " = " + t.Valor + "\n";
-                }                
-                richTraduccion.AppendText(cadena);
-
-                Console.WriteLine( t.IdToken + "   l    " + t.Lexema + "             l   " + t.Valor);
-
-            }
+                richTraduccion.AppendText(ar[i].ToString());
+            }*/
         }
+
     }
 }
