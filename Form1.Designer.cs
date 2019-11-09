@@ -36,6 +36,20 @@
             this.materialFlatButton1 = new MaterialSkin.Controls.MaterialFlatButton();
             this.richTraduccion = new System.Windows.Forms.RichTextBox();
             this.materialLabel3 = new MaterialSkin.Controls.MaterialLabel();
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.archivoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.abrirToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.guardarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.salirToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.documentoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.reportesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.reporteTokensToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.reporteErroresLexicosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.reporteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tablaDeSimbolosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.limpiaDocumentosRecientesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ayudaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // textAnalizar
@@ -133,6 +147,110 @@
             this.materialLabel3.TabIndex = 7;
             this.materialLabel3.Text = "Traduccion";
             // 
+            // menuStrip1
+            // 
+            this.menuStrip1.Dock = System.Windows.Forms.DockStyle.None;
+            this.menuStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.archivoToolStripMenuItem,
+            this.documentoToolStripMenuItem,
+            this.ayudaToolStripMenuItem});
+            this.menuStrip1.Location = new System.Drawing.Point(9, 81);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
+            this.menuStrip1.Size = new System.Drawing.Size(397, 28);
+            this.menuStrip1.TabIndex = 8;
+            this.menuStrip1.Text = "menuStrip1";
+            // 
+            // archivoToolStripMenuItem
+            // 
+            this.archivoToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.abrirToolStripMenuItem,
+            this.guardarToolStripMenuItem,
+            this.salirToolStripMenuItem});
+            this.archivoToolStripMenuItem.Name = "archivoToolStripMenuItem";
+            this.archivoToolStripMenuItem.Size = new System.Drawing.Size(73, 24);
+            this.archivoToolStripMenuItem.Text = "Archivo";
+            // 
+            // abrirToolStripMenuItem
+            // 
+            this.abrirToolStripMenuItem.Name = "abrirToolStripMenuItem";
+            this.abrirToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.abrirToolStripMenuItem.Text = "Abrir";
+            this.abrirToolStripMenuItem.Click += new System.EventHandler(this.AbrirToolStripMenuItem_Click);
+            // 
+            // guardarToolStripMenuItem
+            // 
+            this.guardarToolStripMenuItem.Name = "guardarToolStripMenuItem";
+            this.guardarToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.guardarToolStripMenuItem.Text = "Guardar";
+            this.guardarToolStripMenuItem.Click += new System.EventHandler(this.GuardarToolStripMenuItem_Click);
+            // 
+            // salirToolStripMenuItem
+            // 
+            this.salirToolStripMenuItem.Name = "salirToolStripMenuItem";
+            this.salirToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.salirToolStripMenuItem.Text = "Salir";
+            // 
+            // documentoToolStripMenuItem
+            // 
+            this.documentoToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.reportesToolStripMenuItem,
+            this.limpiaDocumentosRecientesToolStripMenuItem});
+            this.documentoToolStripMenuItem.Name = "documentoToolStripMenuItem";
+            this.documentoToolStripMenuItem.Size = new System.Drawing.Size(101, 24);
+            this.documentoToolStripMenuItem.Text = "Documento";
+            // 
+            // reportesToolStripMenuItem
+            // 
+            this.reportesToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.reporteTokensToolStripMenuItem,
+            this.reporteErroresLexicosToolStripMenuItem,
+            this.reporteToolStripMenuItem,
+            this.tablaDeSimbolosToolStripMenuItem});
+            this.reportesToolStripMenuItem.Name = "reportesToolStripMenuItem";
+            this.reportesToolStripMenuItem.Size = new System.Drawing.Size(292, 26);
+            this.reportesToolStripMenuItem.Text = "Reportes";
+            // 
+            // reporteTokensToolStripMenuItem
+            // 
+            this.reporteTokensToolStripMenuItem.Name = "reporteTokensToolStripMenuItem";
+            this.reporteTokensToolStripMenuItem.Size = new System.Drawing.Size(269, 26);
+            this.reporteTokensToolStripMenuItem.Text = "Reporte Tokens";
+            this.reporteTokensToolStripMenuItem.Click += new System.EventHandler(this.ReporteTokensToolStripMenuItem_Click);
+            // 
+            // reporteErroresLexicosToolStripMenuItem
+            // 
+            this.reporteErroresLexicosToolStripMenuItem.Name = "reporteErroresLexicosToolStripMenuItem";
+            this.reporteErroresLexicosToolStripMenuItem.Size = new System.Drawing.Size(269, 26);
+            this.reporteErroresLexicosToolStripMenuItem.Text = "Reporte Errores Lexicos";
+            this.reporteErroresLexicosToolStripMenuItem.Click += new System.EventHandler(this.ReporteErroresLexicosToolStripMenuItem_Click);
+            // 
+            // reporteToolStripMenuItem
+            // 
+            this.reporteToolStripMenuItem.Name = "reporteToolStripMenuItem";
+            this.reporteToolStripMenuItem.Size = new System.Drawing.Size(269, 26);
+            this.reporteToolStripMenuItem.Text = "Reporte Errorres Sintactico";
+            // 
+            // tablaDeSimbolosToolStripMenuItem
+            // 
+            this.tablaDeSimbolosToolStripMenuItem.Name = "tablaDeSimbolosToolStripMenuItem";
+            this.tablaDeSimbolosToolStripMenuItem.Size = new System.Drawing.Size(269, 26);
+            this.tablaDeSimbolosToolStripMenuItem.Text = "Tabla de Simbolos";
+            // 
+            // limpiaDocumentosRecientesToolStripMenuItem
+            // 
+            this.limpiaDocumentosRecientesToolStripMenuItem.Name = "limpiaDocumentosRecientesToolStripMenuItem";
+            this.limpiaDocumentosRecientesToolStripMenuItem.Size = new System.Drawing.Size(292, 26);
+            this.limpiaDocumentosRecientesToolStripMenuItem.Text = "Limpia Documentos Recientes";
+            this.limpiaDocumentosRecientesToolStripMenuItem.Click += new System.EventHandler(this.LimpiaDocumentosRecientesToolStripMenuItem_Click);
+            // 
+            // ayudaToolStripMenuItem
+            // 
+            this.ayudaToolStripMenuItem.Name = "ayudaToolStripMenuItem";
+            this.ayudaToolStripMenuItem.Size = new System.Drawing.Size(65, 24);
+            this.ayudaToolStripMenuItem.Text = "Ayuda";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -146,9 +264,13 @@
             this.Controls.Add(this.materialLabel1);
             this.Controls.Add(this.consolaTexto);
             this.Controls.Add(this.textAnalizar);
+            this.Controls.Add(this.menuStrip1);
+            this.MainMenuStrip = this.menuStrip1;
             this.Name = "Form1";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
+            this.menuStrip1.ResumeLayout(false);
+            this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -164,6 +286,19 @@
         private MaterialSkin.Controls.MaterialFlatButton materialFlatButton1;
         private System.Windows.Forms.RichTextBox richTraduccion;
         private MaterialSkin.Controls.MaterialLabel materialLabel3;
+        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem archivoToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem abrirToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem guardarToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem salirToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem documentoToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem reportesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem reporteTokensToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem reporteErroresLexicosToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem reporteToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem tablaDeSimbolosToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem limpiaDocumentosRecientesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem ayudaToolStripMenuItem;
     }
 }
 

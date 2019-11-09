@@ -18,47 +18,30 @@ namespace LFP_P2_TraductorC_Pyton.Controladores
         Boolean errorSintactico = false;
 
         String tokenInicio = "";
-        int ambito = 0;
 
-
+        //VARIABLES QUE SIRVEN PARA PONER TABS
+        int ambitoSwitch = 0;
+        int ambitoFor = 0;
+        int ambitoIf = 0;
+        int ambitoWhile = 0;
         //-------TRADUCCIONES ---------
 
-        //Variables variable
-        string lexemaAuxiliar = "";
-        string variableDeclaracion = "";
-
-        //Variables arreglo
-        string nombreArregloDeclarado = "";
-        string nombreArregloVacio = "";
-
+       
+        
         //importante
         string contenidoDeclarado = "";
 
-        string contenidoVacio = "";
         //Variables for
-        string cadenaFor = "";
-        string cadenaFor2 = "";
-        string aumentoDism = "";
-        string variableDeclarada = "";
-
-        //Variables console
-        string print = "";
-
-        //Variables if
-        string condicionIf = "";
-
+        string condicion = "";
+        string aumentoDecremento = "";
+        
+        
 
         //Variables switch
-        string tipoInicio = "";
         string variableSwitch = "";
-        string valorVariableSwitch = "";
         string cuerpoSwitch = "";
-        string cuerpoCase = "";
-        string tipoInicioAux = "";
         int iteracionesSwitch = 0;
-        //guarda el token actual para evitar cosas como console.writeline( + algo ) o  console.writeline(  algo + ) lo que daria error sintactico
-        String tokenPrevio = "";
-
+        
         private TraductorControlador()
         {
 
@@ -85,6 +68,11 @@ namespace LFP_P2_TraductorC_Pyton.Controladores
         {
             this.listaTokens = listaTokens;
             indice = 0;
+            iteracionesSwitch = 0;
+            ambitoSwitch= 0;
+            ambitoFor = 0;
+            ambitoIf = 0;
+            tabs = "";
             preAnalisis = (Token)listaTokens[indice];
             this.tokenInicio = "";
             Inicio();
@@ -114,35 +102,35 @@ namespace LFP_P2_TraductorC_Pyton.Controladores
             }
             else if (preAnalisis.Descripcion.Equals("PR_for"))
             {
-               // InicioFor();
+                InicioFor();
+            }
+            else if (preAnalisis.Descripcion.Equals("PR_class"))
+            {
+                InicioClase();
             }
             else if (preAnalisis.Descripcion.Equals("PR_Console"))
             {
-               // InicioConsole();
+                InicioConsole();
             }
             else if (preAnalisis.Descripcion.Equals("PR_switch"))
             {
                 InicioSwitch();
             }
-            else if (preAnalisis.Descripcion.Equals("PR_class"))
-            {
-               // Clase();
-            }
             else if (preAnalisis.Descripcion.Equals("PR_if"))
             {
-               //InicioIf2();
+               InicioIf2();
             }
             else if (preAnalisis.Descripcion.Equals("PR_while"))
             {
-               // InicioWhile();
+                InicioWhile();
             }
-            else if (preAnalisis.Descripcion.Equals("ComentarioLinea"))
+            else if (preAnalisis.Descripcion.Equals("ComentarioLinea") || preAnalisis.Descripcion.Equals("ComentarioMultiLinea"))
             {
-               // ComentarioLinea();
+                InicioComentario();
             }
-            else if (preAnalisis.Descripcion.Equals("ComentarioMultiLinea"))
+            else if (preAnalisis.Descripcion.Equals("Identificador"))
             {
-               // ComentarioMultiLinea();
+                AsignacionSinTipo();
             }
             else
             {
@@ -153,9 +141,9 @@ namespace LFP_P2_TraductorC_Pyton.Controladores
         }
 
         /**
-         *  DECLARACION Y ASIGNACION
+         *  VARIABLES
          */
-        #region DECLARACION Y ASIGNACION DE VARIABLES 
+        #region TRADUCCION DE VARIABLES 
 
         public void InicioVariable()
         {
@@ -180,7 +168,7 @@ namespace LFP_P2_TraductorC_Pyton.Controladores
         }
         public void DeclaracionVariable()
         {
-            tokenInicio = " " + tokenInicio + "\n" + ListaId() + " " + OpcAsignacion();
+            tokenInicio =  tokenInicio + ListaId() + " " + OpcAsignacion();
             ListaDeclaracion();
             //PuntoComa();
         }
@@ -230,8 +218,7 @@ namespace LFP_P2_TraductorC_Pyton.Controladores
         {
             if (preAnalisis.Descripcion.Equals("Digito") || preAnalisis.Descripcion.Equals("Cadena") || preAnalisis.Descripcion.Equals("Identificador"))
             {
-                valorVariable = preAnalisis.Lexema;
-                valorVariableSwitch = preAnalisis.Lexema;
+                valorVariable = preAnalisis.Lexema + "\n";
                 Parea(preAnalisis.Descripcion);
                 Parea(preAnalisis.Descripcion);
                 return valorVariable;
@@ -241,7 +228,7 @@ namespace LFP_P2_TraductorC_Pyton.Controladores
         #endregion
 
 
-        #region DECLARACION DE ARREGLO
+        #region TRADUCCION DE ARREGLO
         // viene de la declaracion de variable
         public void InicioArreglo()
         {
@@ -254,7 +241,7 @@ namespace LFP_P2_TraductorC_Pyton.Controladores
             {
                 nombreArreglo = preAnalisis.Lexema;
                 Parea("Identificador");
-                tokenInicio = tokenInicio + "\n" + nombreArreglo + OpcAsignacionArreglo();
+                tokenInicio = tokenInicio + nombreArreglo + OpcAsignacionArreglo();
                 //Manda a parea el simbolo de punto y coma
                 Parea(preAnalisis.Descripcion);
             }
@@ -297,12 +284,31 @@ namespace LFP_P2_TraductorC_Pyton.Controladores
             else if (preAnalisis.Descripcion.Equals("PR_new"))
             {
                 Parea("PR_new");
+
                 Parea(preAnalisis.Descripcion);
+                contenidoDeArreglo = preAnalisis.Lexema;
                 Parea(preAnalisis.Descripcion);
-                Parea(preAnalisis.Descripcion);
-                contenidoDeArreglo = "[]";
+
+                int posicionActual = listaTokens.IndexOf(preAnalisis);
+                for (int i = posicionActual; i < listaTokens.Count; i++)
+                {
+                    if (preAnalisis.Lexema.Equals("]"))
+                    {
+                        contenidoDeArreglo = contenidoDeArreglo + "]";
+                        Parea(preAnalisis.Descripcion);
+                        break;
+                    }
+                    else
+                    {
+                        contenidoDeArreglo = contenidoDeArreglo + preAnalisis.Lexema;
+                        Parea(preAnalisis.Descripcion);
+                    }
+                }
+                //Parea(preAnalisis.Descripcion);
+                //Parea(preAnalisis.Descripcion);
+                
             }
-            return contenidoDeArreglo;
+            return contenidoDeArreglo + "\n";
         }
         public String ListaValor()
         {
@@ -338,229 +344,507 @@ namespace LFP_P2_TraductorC_Pyton.Controladores
         /**
         * METODO SWITCH
         */
-        #region DECLARACION SWITCH 
+        #region TRADUCCION SWITCH 
         public void InicioSwitch()
         {
-            Parea(preAnalisis.Descripcion);
-            if (preAnalisis.Descripcion.Equals("S_Parentesis_Izquierdo"))
+
+            ambitoSwitch += 1;
+            int posicionActual = listaTokens.IndexOf(preAnalisis);
+            for (int i = posicionActual; i < listaTokens.Count; i++)
             {
-                
-                Parea(preAnalisis.Descripcion);
-                tokenInicio = tokenInicio + AsignacionSwitch();
-                
-                if (errorSintactico == false)
+                if (preAnalisis.Descripcion.Equals("Identificador"))
                 {
-                    if (preAnalisis.Descripcion.Equals("S_Parentesis_Derecho"))
-                    {
-                        
-                        Parea(preAnalisis.Descripcion);
-                        if (preAnalisis.Descripcion.Equals("S_Llave_Izquierda"))
-                        {
-                            Parea(preAnalisis.Descripcion);
-                            tokenInicio = tokenInicio  + "\n" + CuerpoSwitch();
-                            if (errorSintactico == false)
-                            {
-                                if (preAnalisis.Descripcion.Equals("S_Llave_Derecha"))
-                                {
-                                    Parea(preAnalisis.Descripcion);
-                                    ListaDeclaracion();
-                                }
-                                else
-                                {
-                                    this.lex = ">>Error sintactico: Se esperaba llave de cierre en lugar de [" + preAnalisis.Descripcion + ", " + preAnalisis.Lexema + "]";
-                                    this.tok = "";
-                                    errorSintactico = true;
-                                }
-                            }
-                        }
-                        else
-                        {
-                            this.lex = ">>Error sintactico: Se esperaba llave de apertura en lugar de [" + preAnalisis.Descripcion + ", " + preAnalisis.Lexema + "]";
-                            this.tok = "";
-                            errorSintactico = true;
-                        }
-                    }
-                    else
-                    {
-                        this.lex = ">>Error sintactico: Se esperaba parentesis de cierre en lugar de [" + preAnalisis.Descripcion + ", " + preAnalisis.Lexema + "]";
-                        this.tok = "";
-                        errorSintactico = true;
-                    }
-                }
-            }
-            else
-            {
-                this.lex = ">>Error sintactico: Se esperaba parentesis de apertura en lugar de [ " + preAnalisis.Descripcion + ", " + preAnalisis.Lexema + " ]";
-                this.tok = "";
-                errorSintactico = true;
-            }
-        }
-        public string AsignacionSwitch()
-        {
-            if (preAnalisis.Lexema.Equals(variableSwitch))
-            {
-                //Envia a la traduccion
-                Parea(preAnalisis.Descripcion);
-                return "";
-            }
-            else
-            {
-                this.lex = ">>Error sintactico: La variable [" + preAnalisis.Lexema + "] no esta declarada";
-                this.tok = "";
-                errorSintactico = true;
-                return "";
-            }
-        }
-
-        public String CuerpoSwitch()
-        {
-            if (preAnalisis.Descripcion.Equals("PR_case"))
-            {
-                //va armando la traduccion del switch
-                if (iteracionesSwitch == 0) {
-                    cuerpoSwitch = cuerpoCase + " if " + variableSwitch;
-                    iteracionesSwitch = 1;
-                }
-                else {
-                    cuerpoSwitch = cuerpoCase + "else if " + variableSwitch;
-                }
-
-
-                Parea(preAnalisis.Descripcion);
-                //verifica si concuerdan los tipos, es decir que el caso a analizar concuerde con el tipo de variable
-                //
-                //  String texto = ""; ----> como la variable declarada es string
-                //
-                //  switch(texto){
-                //      case "":  ---> la variable del case debe ser igual a string   
-                //
-                if ((preAnalisis.Descripcion.Equals("Cadena") && (tipoInicio.Equals("PR_string") || tipoInicio.Equals("PR_char"))) ||
-                    (preAnalisis.Descripcion.Equals("Digito") && (tipoInicio.Equals("PR_int") || tipoInicio.Equals("PR_float"))))
-                {
-                    cuerpoSwitch = cuerpoSwitch + " == " + preAnalisis.Lexema;
+                    variableSwitch = preAnalisis.Lexema;
                     Parea(preAnalisis.Descripcion);
-                    if (preAnalisis.Descripcion.Equals("S_Dos_puntos"))
-                    {
-                        Parea(preAnalisis.Descripcion);
-                        cuerpoSwitch = cuerpoSwitch + ":";
-                        CuerpoCase();
-                        return cuerpoSwitch;
-
-                        //envia a la traduccion
-                        //  traduccion(cuerpoSwitch  + "\n" + cuerpoCase);
-                        if (errorSintactico == false)
-                        {
-                            if (preAnalisis.Descripcion.Equals("PR_break"))
-                            {
-                                Parea(preAnalisis.Descripcion);
-                                if (preAnalisis.Descripcion.Equals("S_Punto_y_Coma"))
-                                {
-                                    Parea(preAnalisis.Descripcion);
-                                    CuerpoSwitch();
-                                }
-                                else
-                                {
-                                    this.lex = ">>Error Sintactico: Se esperaban punto y coma en lugar de [" + preAnalisis.Descripcion + " ]";
-                                    this.tok = "";
-                                    errorSintactico = true;
-                                }
-                            }
-                            else
-                            {
-                                this.lex = ">>Error Sintactico: Se esperaban palabra reservada BREAK en lugar de [" + preAnalisis.Descripcion + " ]";
-                                this.tok = "";
-                                errorSintactico = true;
-                            }
-                        }
-                        return cuerpoSwitch;
-                    }
-                    else
-                    {
-                        this.lex = ">>Error Sintactico: Se esperaban dos puntos el lugar de [" + preAnalisis.Descripcion + " ]";
-                        this.tok = "";
-                        errorSintactico = true;
-                    }
+                    CaseSwitch();
+                    break;
                 }
                 else
                 {
-                    this.lex = ">>Error Sintactico: El tipo de variable [ " + tipoInicio + "] no concuerda con el tipo de evaluacion [ " + preAnalisis.Descripcion + " ] del case";
-                    this.tok = "";
-                    errorSintactico = true;
-                }
+                    Parea(preAnalisis.Descripcion);
+                }      
             }
-            else if (preAnalisis.Descripcion.Equals("PR_default"))
+        }
+
+        public void CaseSwitch()
+        { 
+            int posicionActual = listaTokens.IndexOf(preAnalisis);
+            for (int i = posicionActual; i < listaTokens.Count; i++)
             {
+                if (preAnalisis.Descripcion.Equals("PR_case"))
+                {
+                    Parea("PR_case");
+                    
+                    if (iteracionesSwitch == 0)
+                    {
+                        cuerpoSwitch = "\nif " + variableSwitch + " == " + preAnalisis.Lexema +":";
+                    }
+                    else 
+                    {
+                        cuerpoSwitch = "\nelse if " + variableSwitch + " == " + preAnalisis.Lexema + ":";
+                    }
+                    Parea(preAnalisis.Descripcion);
+                    Parea(preAnalisis.Descripcion);
+                   
+                    tokenInicio = tokenInicio + cuerpoSwitch;
+                    string tabs = "";
+                    for (int j = 0; j <= ambitoSwitch; j++)
+                    {
+                        tabs = tabs + " " + "\x020" + "\x020" + "\x020";
+                    }
+
+                    tokenInicio = tokenInicio + "\n" + tabs;
+                    iteracionesSwitch = 1;
+                    ListaDeclaracion();
+                }
+                else if (((Token)listaTokens[i]).Descripcion.Equals("PR_default"))
+                {
+                    tokenInicio = tokenInicio + "\n else: \n\t";
+                    ListaDeclaracion();
+                }
+                else
+                {
+                    Parea(preAnalisis.Descripcion);
+                }
+
+            }
+        }
+
+
+
+        #endregion
+
+        /**
+        * METODO FOR
+        */
+
+        #region TRADUCCION FOR
+        string tabs = "";
+        string tabs1 = "";
+
+        public void InicioFor()
+        {
+            ambitoFor += 1;
+            Parea(preAnalisis.Descripcion);
+            Parea(preAnalisis.Descripcion);
+            Parea(preAnalisis.Descripcion);
+            int posicionActual = 0;
+
+            posicionActual = listaTokens.IndexOf(preAnalisis);
+            if (preAnalisis.Descripcion.Equals("Identificador"))
+            {
+                /*
+                 for ( int y = 5 ; y > 45 ; y + + ) { }
+                 */
+
+                //declaracion de variable y = 5; 
+                for (int i = posicionActual; i < posicionActual+3; i++)
+                {
+                    tokenInicio = tokenInicio + preAnalisis.Lexema;
+                    Parea(preAnalisis.Descripcion);                    
+                }
+                //envia punto y coma
                 Parea(preAnalisis.Descripcion);
 
-                if (preAnalisis.Descripcion.Equals("S_Dos_puntos"))
+                //concatena al texto la condicion del for ==>  (x > 45)
+
+                tokenInicio = tokenInicio + "\n" + "while" + CondicionFor();
+                //trae el aumento o decremento del valor de la variable ( y + +)
+                aumentoDecremento = AumentoDecremento();
+
+                //agrega tabl al interior del for segun el ambito, es decir, para la primera llamada, un tab, segunda llamada dos tabs, etc
+                for (int j = 0; j <= ambitoFor; j++)
                 {
-                    cuerpoSwitch = "else" + ":";
+                    tabs = tabs + " " + "\x020" + "\x020" + "\x020";
+                }
+
+
+                tokenInicio = tokenInicio + "\n" + tabs;
+                ListaDeclaracion();
+
+                tokenInicio = tokenInicio + "\n" + tabs + aumentoDecremento;
+                
+                if (preAnalisis.Lexema.Equals("}"))
+                {
                     Parea(preAnalisis.Descripcion);
                     ListaDeclaracion();
-                    //envia a la traduccion
-                    //traduccion(cuerpoSwitch + "\n" + cuerpoCase);
-                    if (errorSintactico == false)
+                }
+            }
+
+        }
+        public String CondicionFor()
+        {
+            condicion = "";
+            int posicionActual = listaTokens.IndexOf(preAnalisis);
+            for (int i = posicionActual; i < posicionActual + 4; i++)
+            {
+                //Se detiene cuando ecuentra un punto y coma
+                if (preAnalisis.Lexema.Equals(";"))
+                {
+                    break;
+                }
+                else
+                {
+                    //concatena al texto de la condicion el token actual
+                    condicion = condicion + " " + preAnalisis.Lexema;
+                    Parea(preAnalisis.Descripcion);
+                }
+            }
+
+            return condicion;
+        }
+        public String AumentoDecremento()
+        {
+            Parea(preAnalisis.Descripcion);
+            String valorRetorno = "";
+            int posicionActual = listaTokens.IndexOf(preAnalisis);
+            for (int i = posicionActual; i < posicionActual + 4; i++)
+            {
+                if (preAnalisis.Lexema.Equals(")"))
+                {
+                    break;
+                }
+                else
+                {
+                    if (preAnalisis.Descripcion.Equals("Identificador"))
                     {
-                        if (preAnalisis.Descripcion.Equals("PR_break"))
+                        valorRetorno =  preAnalisis.Lexema;
+                        Parea(preAnalisis.Descripcion);
+                    }
+                    else if (preAnalisis.Descripcion.Equals("S_Resta"))
+                    {
+                        Parea(preAnalisis.Descripcion);
+                        if (preAnalisis.Descripcion.Equals("S_Resta"))
                         {
+                            valorRetorno = valorRetorno + "-= 1";
                             Parea(preAnalisis.Descripcion);
-                            if (preAnalisis.Descripcion.Equals("S_Punto_y_Coma"))
-                            {
-                                Parea(preAnalisis.Descripcion);
-                                CuerpoSwitch();
-                            }
-                            else
-                            {
-                                this.lex = ">>Error Sintactico: Se esperaban punto y coma en lugar de [" + preAnalisis.Descripcion + " ]";
-                                this.tok = "";
-                                errorSintactico = true;
-                            }
+                            break;
+                        }
+                    }
+                    else if (preAnalisis.Descripcion.Equals("S_Suma"))
+                    {
+                        Parea(preAnalisis.Descripcion);
+                        if (preAnalisis.Descripcion.Equals("S_Suma"))
+                        {
+                            valorRetorno = valorRetorno + "+= 1";
+                            break;
+                        }
+                    }
+                }
+            }
+            //MANDA A PAREA LOS TOKENS +){ que no son necesarios
+            for (int j = 0; j < 3; j++)
+            {
+                Parea(preAnalisis.Descripcion);
+
+            }
+            Console.WriteLine(preAnalisis.Lexema);
+
+            return valorRetorno;
+        }
+
+        #endregion
+        /**
+        * COMENTARIO
+        */
+
+        #region TRADUCCION COMETARIO
+        public void InicioComentario()
+        {
+            Console.WriteLine("llamo a comentario");
+            if (preAnalisis.Descripcion.Equals("ComentarioLinea"))
+            {
+                string comment = preAnalisis.Lexema;
+                comment = comment.Replace("//", "#");
+                Parea(preAnalisis.Descripcion);
+                tokenInicio = tokenInicio + "\n" + comment + "\n";
+            }
+            else if (preAnalisis.Descripcion.Equals("ComentarioMultiLinea"))
+            {
+                string comment = preAnalisis.Lexema;
+                comment = comment.Replace("/*", " ' ' ' ");
+                comment = comment.Replace("*/", " ' ' ' ");
+                Parea(preAnalisis.Descripcion);
+                tokenInicio = tokenInicio + "\n" + comment + "\n";
+            }
+            ListaDeclaracion();
+        }
+        #endregion
+        /**
+        * CONSOLE
+        */
+
+        #region TRADUCTOR CONSOLE
+        public void InicioConsole()
+        {
+           
+            Parea(preAnalisis.Descripcion);
+            if (preAnalisis.Lexema.Equals("."))
+            {
+                Parea(preAnalisis.Descripcion);
+                if (preAnalisis.Lexema.Equals("WriteLine"))
+                {
+                    Parea(preAnalisis.Descripcion);
+                    Parea(preAnalisis.Descripcion);
+                    tokenInicio = tokenInicio + "\n" + "print( ";
+                    int posicionActual = listaTokens.IndexOf(preAnalisis);
+                    for (int i = posicionActual; i < listaTokens.Count; i++)
+                    {
+                        if (preAnalisis.Lexema.Equals(")"))
+                        {
+                            tokenInicio = tokenInicio + " )";
+                            Parea(preAnalisis.Descripcion);
+                            Parea(preAnalisis.Descripcion);
+                            Console.WriteLine(preAnalisis.Descripcion);
+                            //ListaDeclaracion();
+                            break;
                         }
                         else
                         {
-                            this.lex = ">>Error Sintactico: Se esperaban palabra reservada BREAK en lugar de [" + preAnalisis.Descripcion + " ]";
-                            this.tok = "";
-                            errorSintactico = true;
+                            tokenInicio = tokenInicio + " " + preAnalisis.Lexema;
+                            Parea(preAnalisis.Descripcion);
                         }
+                    }
+                }
+            }
+        }
+        #endregion
+        /**
+        * METODO WHILE
+        */
+
+        #region TRADUCTOR WHILE
+
+        public void InicioWhile()
+        {
+            ambitoWhile++;
+            tokenInicio = tokenInicio + "\n" + preAnalisis.Lexema;
+            Parea(preAnalisis.Descripcion);
+            Parea(preAnalisis.Descripcion);
+            tokenInicio = tokenInicio + " " + CondicionWhile();
+            for (int i = 0; i <= ambitoWhile; i++)
+            {
+                tabs = tabs + "\x020" + "\x020" + "\x020";
+            }
+            tokenInicio = tokenInicio + "\n" + tabs;
+            ListaDeclaracion();
+
+            if (preAnalisis.Lexema.Equals("}"))
+            {
+                tokenInicio = tokenInicio + "\n";
+                Parea(preAnalisis.Descripcion);
+                ListaDeclaracion();
+            }
+
+        }
+        public string CondicionWhile()
+        {
+            string condicion = "";
+            int posicionActual = listaTokens.IndexOf(preAnalisis);
+            for (int i = posicionActual; i < listaTokens.Count; i++)
+            {
+                if (preAnalisis.Lexema.Equals(")"))
+                {
+                    Parea(preAnalisis.Descripcion);
+                    Parea(preAnalisis.Descripcion); 
+                    break;
+                }
+                else
+                {
+                    condicion = condicion + preAnalisis.Lexema;
+                    Parea(preAnalisis.Descripcion);
+                }
+            }
+            return condicion + ":";
+        }
+
+
+        #endregion
+        /**
+        * METODO IF
+        */
+        #region TRADUCTOR IF
+
+        public void InicioIf2() {
+            ambitoIf++;
+            //Envia la palabra if
+            Parea(preAnalisis.Descripcion);
+            tokenInicio = tokenInicio + "\n if ";
+            //envia el (
+            Parea(preAnalisis.Descripcion);
+            //obtiene las condiciones
+            tokenInicio = tokenInicio + CondicionIf();
+            string tabs = "";
+            for (int i = 0; i <= ambitoIf; i++)
+            {
+                tabs = tabs + " " + "\x020" + "\x020" + "\x020";
+            }
+            //MANDA LA LLAVE {
+            Parea(preAnalisis.Descripcion);
+            tokenInicio = tokenInicio + "\n" + tabs;
+            ListaDeclaracion();
+
+
+            if (preAnalisis.Lexema.Equals("}"))
+            {
+                Parea(preAnalisis.Descripcion);
+                if (preAnalisis.Descripcion.Equals("PR_else"))
+                {
+                    tokenInicio = tokenInicio + "\n" + "else: \n";
+                    Parea(preAnalisis.Descripcion);
+                    Parea(preAnalisis.Descripcion);
+                    tokenInicio = tokenInicio + "\n" + tabs;
+                    ListaDeclaracion();
+                    if (preAnalisis.Lexema.Equals("}"))
+                    {
+                        Parea(preAnalisis.Descripcion);
+                        ListaDeclaracion();
                     }
                 }
                 else
                 {
-                    this.lex = ">>Error Sintactico: Se esperaban dos puntos el lugar de [" + preAnalisis.Descripcion + " ]";
-                    this.tok = "";
-                    errorSintactico = true;
+                    ListaDeclaracion();
                 }
+            }
 
-            }
-            else if (preAnalisis.Descripcion.Equals("S_Llave_Derecha"))
-            {
 
-            }
-            else
-            { 
-                this.lex = ">>Error Sintactico: Se esperaba palabra reservada CASE en lugar de [ " + preAnalisis.Lexema + " ]";
-                this.tok = "";
-                errorSintactico = true;
-                return "";
-            }
-            return "";
+
         }
 
-        public void CuerpoCase()
-        {
-            ListaDeclaracion();
 
+        public String CondicionIf()
+        {
+            string simboloEvaluar = "";
+            if (preAnalisis.Descripcion.Equals("Identificador") || preAnalisis.Descripcion.Equals("Digito") || preAnalisis.Descripcion.Equals("Cadena"))
+            {
+                simboloEvaluar = preAnalisis.Lexema;
+                Parea(preAnalisis.Descripcion);
+                /**
+                 * SIMBOLOS DE INCREMENTO 
+                 */
+                simboloEvaluar = simboloEvaluar + " " + SimbolosIf();
+                if ((preAnalisis.Descripcion.Equals("Identificador"))|| (preAnalisis.Descripcion.Equals("Digito"))
+                    || (preAnalisis.Descripcion.Equals("Cadena") ))
+                {
+                    simboloEvaluar = simboloEvaluar + " " + preAnalisis.Lexema + ":"; 
+                    Parea(preAnalisis.Descripcion);
+                    Parea(preAnalisis.Descripcion);
+                }
+                
+            }
+            return simboloEvaluar;
+            
+        }
+
+        public String SimbolosIf()
+        {
+            string condicionIf = "";
+            switch (preAnalisis.Descripcion)
+            {
+                case "S_Igual":
+                    if (preAnalisis.Descripcion.Equals("S_Igual"))
+                    {
+                        Parea("S_Igual");
+                        if (preAnalisis.Descripcion.Equals("S_Igual"))
+                        {
+                            condicionIf = "==";
+                            Parea("S_Igual");
+                        }
+                    }
+                    break;
+                case "S_Mayor_Que":
+                    if (preAnalisis.Descripcion.Equals("S_Mayor_Que"))
+                    {
+                        condicionIf = preAnalisis.Lexema;
+                        Parea("S_Mayor_Que");
+                        if (preAnalisis.Lexema.Equals("="))
+                        {
+                            condicionIf = condicionIf + preAnalisis.Lexema;
+                            Parea(preAnalisis.Descripcion);
+                        }
+                    }
+                    break;
+                case "S_Menor_Que":
+                    if (preAnalisis.Descripcion.Equals("S_Menor_Que"))
+                    {
+                        condicionIf = condicionIf + preAnalisis.Lexema;
+                        Parea("S_Menor_Que");
+                        if (preAnalisis.Lexema.Equals("="))
+                        {
+                            condicionIf = condicionIf + preAnalisis.Lexema;
+                            Parea(preAnalisis.Descripcion);
+                        }
+                    }
+                    break;
+                case "S_Excl":
+                    if (preAnalisis.Descripcion.Equals("S_Excl"))
+                    {
+                        Parea("S_Excl");
+                        if (preAnalisis.Descripcion.Equals("S_Igual"))
+                        {
+                            condicionIf = condicionIf + "!=";
+                            Parea("S_Igual");
+                        }
+                    }
+                    
+                    break;
+                default:
+                    break;
+            }
+            return condicionIf;
         }
         #endregion
 
+
+
+        #region CLASE
+        public void InicioClase()
+        {
+            Parea(preAnalisis.Descripcion);
+            Parea(preAnalisis.Descripcion);
+            Parea(preAnalisis.Descripcion);
+            tokenInicio = tokenInicio + "\x020" + "\x020" + "\x020";
+            ListaDeclaracion();
+            if (preAnalisis.Lexema.Equals("}"))
+            {
+                Parea(preAnalisis.Descripcion);
+                ListaDeclaracion();
+            }
+
+        }
+
+        #endregion
+
+        #region ASIGNACION SIN TIPO
+        public void AsignacionSinTipo()
+        {
+            if (preAnalisis.Descripcion.Equals("Identificador"))
+            {
+                tokenInicio = tokenInicio + preAnalisis.Lexema;
+                Parea(preAnalisis.Descripcion);
+                if (preAnalisis.Lexema.Equals("="))
+                {
+                    tokenInicio = tokenInicio + " " + preAnalisis.Lexema;
+                    Parea(preAnalisis.Descripcion);
+                    tokenInicio = tokenInicio + preAnalisis.Lexema;
+                    Parea(preAnalisis.Descripcion);
+                    if (preAnalisis.Lexema.Equals(";"))
+                    {
+                        Parea(preAnalisis.Descripcion);
+                        ListaDeclaracion();
+                    }
+                }
+            }
+
+        }
+
+        #endregion
 
         /**
     *   Parea
     *  Este metodo lo que hace es comparar si el token de preanalisis tiene le tipo que le indicamos, 
     *  en caso no sean iguales maraca error.
     * */
-        string tok = " ";
-        string lex = " ";
         public void Parea(String tipoToken)
         {
             if (errorSintactico)
@@ -578,60 +862,21 @@ namespace LFP_P2_TraductorC_Pyton.Controladores
             }
             else
             {
-                tok = tok + " " + tipoToken;
-
+                
                 if (indice < listaTokens.Count - 1)
                 {
                     if (preAnalisis.Descripcion.Equals(tipoToken))
                     {
                         indice++;
                         preAnalisis = (Token)listaTokens[indice];
-                        lex = lex + " " + preAnalisis.Lexema;
                     }
                     else
                     {
-                        //Se genera un error sintactico y se agrega a la lista de errores sintacitos
-                        this.lex = ">>Error sintactico se esperaba [" + tipoToken + "] en lugar de [" + preAnalisis.Descripcion + ", " + preAnalisis.Lexema + "]";
                         errorSintactico = true;
                     }
                 }
             }
 
-        }
-
-        public string returnT()
-        {
-            if (errorSintactico == true)
-            {
-                return this.lex;
-            }
-            else
-            {
-                return this.lex + "\n" + this.tok + "\n";
-            }
-        }
-
-
-        public void traduccionComentario(string cadena, string tipo)
-        {
-            if (tipo.Equals("ComentarioLinea"))
-            {
-                cadena = cadena.Replace("//", "#");
-            }
-            else if (tipo.Equals("ComentarioMultiLinea"))
-            {
-                cadena = cadena.Replace("/*", "' ' '");
-                cadena = cadena.Replace("*/", "' ' '" + "\n");
-            }
-        }
-
-        ArrayList tokensTraducidos = new ArrayList();
-        int iteracionesFor = 0;
-        string finalFor = "";
-        public void traduccion(string cadena)
-        {
-            Console.WriteLine("la cadena es " + cadena);
-            tokensTraducidos.Add(cadena);
         }
 
         public string getTokensTraducidos()

@@ -432,7 +432,7 @@ namespace LFP_P2_TraductorC_Pyton.AnalizadorLex
                             if (c == '/')
                             {
                                 auxiliar += c;
-                                opcion = 18;
+                                //opcion = 18;
                                 TokenControlador.Instancia.agregarToken(fila, (columna - auxiliar.Length), auxiliar + "\n", "ComentarioMultiLinea");
                                 opcion = 0;
                                 auxiliar = "";
