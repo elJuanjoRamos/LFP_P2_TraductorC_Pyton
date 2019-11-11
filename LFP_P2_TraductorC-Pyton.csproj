@@ -51,6 +51,8 @@
   <ItemGroup>
     <Compile Include="AnalizadorLex\AnalizadorLexico.cs" />
     <Compile Include="AnalizadorSint\AnalizadorSintactico.cs" />
+    <Compile Include="Controladores\SimboloControlador.cs" />
+    <Compile Include="Controladores\SintacticoControlador.cs" />
     <Compile Include="Controladores\TablaTraduccionControlador.cs" />
     <Compile Include="Controladores\TokenControlador.cs" />
     <Compile Include="Controladores\TraductorControlador.cs" />
@@ -60,7 +62,9 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="Modelos\TablaTraduccion.cs" />
+    <Compile Include="Modelos\CadenaTraducida.cs" />
+    <Compile Include="Modelos\Simbolo.cs" />
+    <Compile Include="Modelos\Sintactico.cs" />
     <Compile Include="Modelos\Token.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

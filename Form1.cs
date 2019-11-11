@@ -28,41 +28,147 @@ namespace LFP_P2_TraductorC_Pyton
         //variables globales
         public string nombreArc = "";
         public string tempNombreArc = "";
-
+        public string cadenaInicio = "";
         private void Form1_Load(object sender, EventArgs e)
         {
 
         }
 
+        int ambito = 0;
+        string tab = "";
+
         private void Analizar_Click(object sender, EventArgs e)
         {
+            TokenControlador.Instancia.clearListaTokensError();
+            TokenControlador.Instancia.clearListaTokens();
+            TraductorControlador.Instancia.clearTokensTraducidos();
+            TablaTraduccionControlador.Instancia.clearTabla();
+
             if (nombreArc == "")
             {
                 tempNombreArc = "escrito";
             }
-            TokenControlador.Instancia.clearListaTokens();
-            AnalizadorLexico.Instancia.analizador_Lexico(textAnalizar.Text);
-            TraductorControlador.Instancia.clearTokensTraducidos();
-
-            ArrayList a = TokenControlador.Instancia.getArrayListTokens();
-
-
-            ArrayList b = TokenControlador.Instancia.getArrayListErrors();
-
-            if (b.Count == 0)
+            if (textAnalizar.Text != "")
             {
 
-                AnalizadorSintactico.Instancia.obtenerLista(a);
-                TraductorControlador.Instancia.obtenerLista(a);
-                this.consolaTexto.Text = "";
-                this.consolaTexto.AppendText(AnalizadorSintactico.Instancia.returnT());
-                this.richTraduccion.Text = "";
-                richTraduccion.AppendText(TraductorControlador.Instancia.getTokensTraducidos());
+                AnalizadorLexico.Instancia.analizador_Lexico(textAnalizar.Text);
+                ArrayList a = TokenControlador.Instancia.getArrayListTokens();
+                ArrayList b = TokenControlador.Instancia.getArrayListErrors();
+                ArrayList arrayTraduccion = TablaTraduccionControlador.Instancia.getTabla();
+
+
+
+                if (b.Count == 0)
+                {
+                    AnalizadorSintactico.Instancia.obtenerLista(a);
+                    TraductorControlador.Instancia.obtenerLista(a);
+                    this.consolaTexto.Text = "";
+                    this.consolaTexto.AppendText(AnalizadorSintactico.Instancia.returnT());
+                    this.richTraduccion.Text = "";
+                    Console.WriteLine("el arreglo traduccion es " + arrayTraduccion.Count);
+                    for (int i = 0; i < arrayTraduccion.Count; i++)
+                    {
+
+                        CadenaTraducida texto = (CadenaTraducida)arrayTraduccion[i];
+
+
+                        richTraduccion.AppendText(texto.Cadena + "\n");
+
+
+                        /*if (texto.Tipo.Equals("for") || texto.Tipo.Equals("if") || 
+                            texto.Tipo.Equals("switch") || texto.Tipo.Equals("while") || 
+                            texto.Tipo.Equals("else") || texto.Tipo.Equals("variable")
+                            || texto.Tipo.Equals("array") || texto.Tipo.Equals("case"))
+                        {
+
+                        }
+
+                        if (texto.Tipo.Equals("#"))
+                        {
+                            ambito++;
+                            richTraduccion.AppendText(texto.Tipo + "\n");
+
+                            for (int j = 0; j <= ambito; j++)
+                            {
+                                tab = tab + "\x020" + "\x020" + "\x020";
+                            }
+                            string textoInterior = "";
+                            for (int k = i+1; k < arrayTraduccion.Count; k++)
+                            {
+                                texto = ((CadenaTraducida)arrayTraduccion[k]);
+                                if (texto.Tipo.Equals("#"))
+                                {
+                                    i = k-1;
+                                    tab="";
+                                    richTraduccion.AppendText(textoInterior + "\n");
+                                    break;
+                                }
+                                else
+                                {
+                                    textoInterior = textoInterior + "\n" + tab + texto.Cadena;
+                                }
+                            }
+                            Console.WriteLine();
+                            }  
+                        else
+                        {
+                            
+                        }*/
+                    }
+                    
+
+
             }
             else
             {
                 this.consolaTexto.AppendText("Exiten errores lexicos");
             }
+
+            }
+            else
+            {
+                alertMessage("No se ha detectado ningun texto"); 
+            }
+
+        }
+        public void Tabular1(String texto)
+        {
+            
+        }
+        public int index = 0;
+        public void Tabular2(string texto)
+        {
+            ArrayList arrayTraduccion = TablaTraduccionControlador.Instancia.getTabla();
+            string txt = "";
+           
+            if (texto.Equals("cuerpoSwitch"))
+            {
+
+                for (int m = index+1; m < arrayTraduccion.Count; m++)
+                {
+                    if (((CadenaTraducida)arrayTraduccion[m]).Tipo == "cuerpoSwitch")
+                    {
+                        richTraduccion.AppendText(cadenaInicio + "\n");
+                        Console.WriteLine("la cadena de inicio es " + cadenaInicio);
+                        index = m;
+                        break;
+                    }
+                    else
+                    {
+                        cadenaInicio = cadenaInicio + "\n" + tab + ((CadenaTraducida)arrayTraduccion[m]).Cadena;
+                    }
+                }
+                /*string tabs = "";
+
+                for (int j = 0; j <= ambito; j++)
+                {
+                    tabs = tabs + "\x020" + "\x020" + "\x020" + "\x020";
+                }*/
+                //string cuerpoExpresion = "";
+
+            }
+            Tabular2(txt);
+
         }
         public string textoMostrar = "";
         private void MaterialFlatButton1_Click(object sender, EventArgs e)
@@ -216,11 +322,15 @@ namespace LFP_P2_TraductorC_Pyton
         {
             nombreArc = "";
             tempNombreArc = "";
-            TokenControlador.Instancia.clearListaTokens();
+            ambito = 0;
+            tab = "";
             TokenControlador.Instancia.clearListaTokensError();
+            TokenControlador.Instancia.clearListaTokens();
             TraductorControlador.Instancia.clearTokensTraducidos();
+            TablaTraduccionControlador.Instancia.clearTabla();
             this.consolaTexto.Text = "";
             this.richTraduccion.Text = "";
+            this.textAnalizar.Text = "";
         }
 
 

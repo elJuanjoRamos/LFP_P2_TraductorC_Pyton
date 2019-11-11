@@ -13,6 +13,7 @@ namespace LFP_P2_TraductorC_Pyton.Controladores
     {
         private readonly static TokenControlador instancia = new TokenControlador();
         private ArrayList arrayListTokens = new ArrayList();
+        private ArrayList arrayListTokensPorTraducir = new ArrayList();
         private ArrayList arrayListErrors = new ArrayList();
         private int idToken = 1;
         private int idTokenError = 1;
@@ -35,6 +36,11 @@ namespace LFP_P2_TraductorC_Pyton.Controladores
             idToken++;
 
         }
+        public void agregarTokenTraducir(int fila, int columna, string lexema, string descripcion)
+        {
+            Token token = new Token(0, lexema, descripcion, 0, 0);
+            arrayListTokensPorTraducir.Add(token);
+        }
 
         public void agregarError(int fila, int columna, string lexema, string descripcion)
         {
@@ -47,6 +53,12 @@ namespace LFP_P2_TraductorC_Pyton.Controladores
         {
             return arrayListTokens;
         }
+
+        public ArrayList getArrayListTokensPorTraducir()
+        {
+            return arrayListTokens;
+        }
+
 
         public ArrayList getArrayListErrors()
         {

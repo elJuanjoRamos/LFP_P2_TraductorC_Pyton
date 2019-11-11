@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.IO;
 using System.Threading.Tasks;
 using LFP_P2_TraductorC_Pyton.Modelos;
 
@@ -12,8 +11,8 @@ namespace LFP_P2_TraductorC_Pyton.Controladores
     class TablaTraduccionControlador
     {
         private readonly static TablaTraduccionControlador instancia = new TablaTraduccionControlador();
-        private ArrayList tablaSimbolos = new ArrayList();
-        private int idToken = 1;
+        private ArrayList tablaTraducciones = new ArrayList();
+        private int id = 1;
         private TablaTraduccionControlador()
         {
         }
@@ -26,21 +25,21 @@ namespace LFP_P2_TraductorC_Pyton.Controladores
             }
         }
 
-        public void agregar(string lexema, string valor, string tipo)
+        public void agregar(string texto, string tipo)
         {
-            TablaTraduccion t = new TablaTraduccion(idToken, lexema, valor, tipo);
-            tablaSimbolos.Add(t);
-            idToken++;
+            CadenaTraducida c = new CadenaTraducida(id, texto, tipo);
+            tablaTraducciones.Add(c);
+            id++;
         }
 
 
         public ArrayList getTabla()
         {
-            return this.tablaSimbolos;
+            return this.tablaTraducciones;
         }
         public void clearTabla()
         {
-            tablaSimbolos.Clear();
+            tablaTraducciones.Clear();
         }
     }
 }
