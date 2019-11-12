@@ -89,26 +89,26 @@ namespace LFP_P2_TraductorC_Pyton.AnalizadorLex
                                 {
                                     columna++;
                                     TokenControlador.Instancia.agregarToken(fila, (columna - 1), c.ToString(), "S_Menor_Que");
-                                    TokenControlador.Instancia.agregarTokenTraducir(fila, (columna - 1), c.ToString(), "S_Menor_Que");
+                                    //TokenControlador.Instancia.agregarTokenTraducir(fila, (columna - 1), c.ToString(), "S_Menor_Que");
                                 }
                                 else if (c.Equals('>'))
                                 {
                                     columna++;
                                     TokenControlador.Instancia.agregarToken(fila, (columna - 1), c.ToString(), "S_Mayor_Que");
-                                    TokenControlador.Instancia.agregarTokenTraducir(fila, (columna - 1), c.ToString(), "S_Mayor_Que");
+                                //    TokenControlador.Instancia.agregarTokenTraducir(fila, (columna - 1), c.ToString(), "S_Mayor_Que");
 
                                 }
                                 else if (c.Equals('='))
                                 {
                                     columna++;
                                     TokenControlador.Instancia.agregarToken(fila, (columna - 1), c.ToString(), "S_Igual");
-                                    TokenControlador.Instancia.agregarTokenTraducir(fila, (columna - 1), c.ToString(), "S_Igual");
+                                    //TokenControlador.Instancia.agregarTokenTraducir(fila, (columna - 1), c.ToString(), "S_Igual");
                                 }
                                 else if (c.Equals('+'))
                                 {
                                     columna++;
                                     TokenControlador.Instancia.agregarToken(fila, (columna - 1), c.ToString(), "S_Suma");
-                                    TokenControlador.Instancia.agregarTokenTraducir(fila, (columna - 1), c.ToString(), "S_Suma");
+                                   // TokenControlador.Instancia.agregarTokenTraducir(fila, (columna - 1), c.ToString(), "S_Suma");
                                 }
 
                                 else
@@ -134,12 +134,12 @@ namespace LFP_P2_TraductorC_Pyton.AnalizadorLex
                                 else if (c.Equals(','))
                                 {
                                     TokenControlador.Instancia.agregarToken(fila, (columna - 1), c.ToString(), "S_Coma");
-                                    TokenControlador.Instancia.agregarTokenTraducir(fila, (columna - 1), c.ToString(), "S_Coma");
+                                    //TokenControlador.Instancia.agregarTokenTraducir(fila, (columna - 1), c.ToString(), "S_Coma");
                                 }
                                 else if (c.Equals('{'))
                                 {
                                     TokenControlador.Instancia.agregarToken(fila, (columna - 1), c.ToString(), "S_Llave_Izquierda");
-                                    TokenControlador.Instancia.agregarTokenTraducir(fila, (columna - 1), c.ToString(), "S_Llave_Izquierda");
+                                    //TokenControlador.Instancia.agregarTokenTraducir(fila, (columna - 1), c.ToString(), "S_Llave_Izquierda");
                                 }
                                 else if (c.Equals('}'))
                                 {

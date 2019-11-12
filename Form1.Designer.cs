@@ -33,7 +33,7 @@
             this.materialLabel1 = new MaterialSkin.Controls.MaterialLabel();
             this.materialLabel2 = new MaterialSkin.Controls.MaterialLabel();
             this.analizar = new MaterialSkin.Controls.MaterialFlatButton();
-            this.materialFlatButton1 = new MaterialSkin.Controls.MaterialFlatButton();
+            this.traduccion = new MaterialSkin.Controls.MaterialFlatButton();
             this.richTraduccion = new System.Windows.Forms.RichTextBox();
             this.materialLabel3 = new MaterialSkin.Controls.MaterialLabel();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
@@ -110,21 +110,21 @@
             this.analizar.UseVisualStyleBackColor = true;
             this.analizar.Click += new System.EventHandler(this.Analizar_Click);
             // 
-            // materialFlatButton1
+            // traduccion
             // 
-            this.materialFlatButton1.AutoSize = true;
-            this.materialFlatButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.materialFlatButton1.Depth = 0;
-            this.materialFlatButton1.Location = new System.Drawing.Point(493, 156);
-            this.materialFlatButton1.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
-            this.materialFlatButton1.MouseState = MaterialSkin.MouseState.HOVER;
-            this.materialFlatButton1.Name = "materialFlatButton1";
-            this.materialFlatButton1.Primary = false;
-            this.materialFlatButton1.Size = new System.Drawing.Size(213, 36);
-            this.materialFlatButton1.TabIndex = 5;
-            this.materialFlatButton1.Text = "materialFlatButton1";
-            this.materialFlatButton1.UseVisualStyleBackColor = true;
-            this.materialFlatButton1.Click += new System.EventHandler(this.MaterialFlatButton1_Click);
+            this.traduccion.AutoSize = true;
+            this.traduccion.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.traduccion.Depth = 0;
+            this.traduccion.Location = new System.Drawing.Point(1232, 156);
+            this.traduccion.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.traduccion.MouseState = MaterialSkin.MouseState.HOVER;
+            this.traduccion.Name = "traduccion";
+            this.traduccion.Primary = false;
+            this.traduccion.Size = new System.Drawing.Size(202, 36);
+            this.traduccion.TabIndex = 5;
+            this.traduccion.Text = "Guardar Traduccion";
+            this.traduccion.UseVisualStyleBackColor = true;
+            this.traduccion.Click += new System.EventHandler(this.MaterialFlatButton1_Click);
             // 
             // richTraduccion
             // 
@@ -169,7 +169,7 @@
             this.guardarToolStripMenuItem,
             this.salirToolStripMenuItem});
             this.archivoToolStripMenuItem.Name = "archivoToolStripMenuItem";
-            this.archivoToolStripMenuItem.Size = new System.Drawing.Size(73, 24);
+            this.archivoToolStripMenuItem.Size = new System.Drawing.Size(73, 26);
             this.archivoToolStripMenuItem.Text = "Archivo";
             // 
             // abrirToolStripMenuItem
@@ -231,12 +231,14 @@
             this.reporteToolStripMenuItem.Name = "reporteToolStripMenuItem";
             this.reporteToolStripMenuItem.Size = new System.Drawing.Size(269, 26);
             this.reporteToolStripMenuItem.Text = "Reporte Errorres Sintactico";
+            this.reporteToolStripMenuItem.Click += new System.EventHandler(this.ReporteToolStripMenuItem_Click);
             // 
             // tablaDeSimbolosToolStripMenuItem
             // 
             this.tablaDeSimbolosToolStripMenuItem.Name = "tablaDeSimbolosToolStripMenuItem";
             this.tablaDeSimbolosToolStripMenuItem.Size = new System.Drawing.Size(269, 26);
             this.tablaDeSimbolosToolStripMenuItem.Text = "Tabla de Simbolos";
+            this.tablaDeSimbolosToolStripMenuItem.Click += new System.EventHandler(this.TablaDeSimbolosToolStripMenuItem_Click);
             // 
             // limpiaDocumentosRecientesToolStripMenuItem
             // 
@@ -248,7 +250,7 @@
             // ayudaToolStripMenuItem
             // 
             this.ayudaToolStripMenuItem.Name = "ayudaToolStripMenuItem";
-            this.ayudaToolStripMenuItem.Size = new System.Drawing.Size(65, 24);
+            this.ayudaToolStripMenuItem.Size = new System.Drawing.Size(65, 26);
             this.ayudaToolStripMenuItem.Text = "Ayuda";
             // 
             // Form1
@@ -258,7 +260,7 @@
             this.ClientSize = new System.Drawing.Size(1519, 863);
             this.Controls.Add(this.materialLabel3);
             this.Controls.Add(this.richTraduccion);
-            this.Controls.Add(this.materialFlatButton1);
+            this.Controls.Add(this.traduccion);
             this.Controls.Add(this.analizar);
             this.Controls.Add(this.materialLabel2);
             this.Controls.Add(this.materialLabel1);
@@ -283,7 +285,7 @@
         private MaterialSkin.Controls.MaterialLabel materialLabel1;
         private MaterialSkin.Controls.MaterialLabel materialLabel2;
         private MaterialSkin.Controls.MaterialFlatButton analizar;
-        private MaterialSkin.Controls.MaterialFlatButton materialFlatButton1;
+        private MaterialSkin.Controls.MaterialFlatButton traduccion;
         private System.Windows.Forms.RichTextBox richTraduccion;
         private MaterialSkin.Controls.MaterialLabel materialLabel3;
         private System.Windows.Forms.MenuStrip menuStrip1;

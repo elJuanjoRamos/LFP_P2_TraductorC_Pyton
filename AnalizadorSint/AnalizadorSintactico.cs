@@ -223,14 +223,17 @@ namespace LFP_P2_TraductorC_Pyton.AnalizadorSint
         {
             if (preAnalisis.Descripcion.Equals("Digito") && (tokenInicio.Equals("PR_int") || tokenInicio.Equals("PR_float")))
             {
+                SimboloControlador.Instancia.agregarSimbolo(this.lexemaAuxiliar, preAnalisis.Lexema, tokenInicio.Replace("PR_", ""));
                 Parea("Digito");
             }
             else if (preAnalisis.Descripcion.Equals("Cadena") && (tokenInicio.Equals("PR_char") || tokenInicio.Equals("PR_string")))
             {
+                SimboloControlador.Instancia.agregarSimbolo(this.lexemaAuxiliar, preAnalisis.Lexema, tokenInicio.Replace("PR_", ""));
                 Parea("Cadena");
             }
             else if (preAnalisis.Descripcion.Equals("Identificador") && (tokenInicio.Equals("PR_bool") || tokenInicio.Equals("PR_boolean")))
             {
+                SimboloControlador.Instancia.agregarSimbolo(this.lexemaAuxiliar, preAnalisis.Lexema, tokenInicio.Replace("PR_", ""));
                 Parea("Identificador");
             }
             else
@@ -247,8 +250,16 @@ namespace LFP_P2_TraductorC_Pyton.AnalizadorSint
         {
             if (preAnalisis.Descripcion.Equals("S_Punto_y_Coma"))
             {
-                Parea("S_Punto_y_Coma");
-                ListaDeclaracion();
+                Parea(preAnalisis.Descripcion);
+                if (preAnalisis.Descripcion.Equals("PR_switch"))
+                {
+                    this.variableSwitch = this.lexemaAuxiliar;
+                    InicioSwitch();
+                }
+                else
+                {
+                    ListaDeclaracion();
+                }
             }
             else if (preAnalisis.Descripcion.Equals("S_Coma"))
             {
@@ -261,8 +272,8 @@ namespace LFP_P2_TraductorC_Pyton.AnalizadorSint
             {
                 this.lex = ">>Error sintactico: Se esperaba [ punto y coma  ] al final de [" + preAnalisis.Descripcion + ", " + preAnalisis.Lexema + "]";
                 SintacticoControlador.Instancia.agregarError(preAnalisis.Descripcion, this.lex, preAnalisis.Fila, preAnalisis.Columna);
-                this.errorSintactico = true;
-                Console.WriteLine(">>Error sintactico: Se esperaba [ punto y coma  ] al final de [" + preAnalisis.Descripcion + ", " + preAnalisis.Lexema + "]");
+                this.tok = "";
+                errorSintactico = true;
             }
         }
         #endregion
@@ -873,16 +884,32 @@ namespace LFP_P2_TraductorC_Pyton.AnalizadorSint
         {
             if (preAnalisis.Descripcion.Equals("PR_int"))
             {
+                String variable, tipo, igual;
+                tipo = preAnalisis.Lexema;
                 Parea("PR_int");
+                variable = preAnalisis.Lexema;
                 Parea("Identificador");
                 Parea("S_Igual");
+                igual = preAnalisis.Lexema;
                 Parea("Digito");
+                SimboloControlador.Instancia.agregarSimbolo(variable, igual, tipo);
             }
             else if (preAnalisis.Descripcion.Equals("Identificador"))
             {
+                String variable, igual;
+                variable = preAnalisis.Lexema;
                 Parea("Identificador");
                 Parea("S_Igual");
+                igual = preAnalisis.Lexema;
                 Parea("Digito");
+                if (SimboloControlador.Instancia.buscar(variable))
+                {
+                    SimboloControlador.Instancia.editarSimbolo(variable, igual);
+                }
+                else
+                {
+                    SimboloControlador.Instancia.agregarSimbolo(variable, igual, "0");
+                }
             }
         }
 
@@ -978,69 +1005,172 @@ namespace LFP_P2_TraductorC_Pyton.AnalizadorSint
         #region SWITCH
         public void InicioSwitch()
         {
+            this.tipoInicioAux = tipoInicio;
             Parea("PR_switch");
             Parea("S_Parentesis_Izquierdo");
             //ASIGNACION
-            Parea("Identificador");
+            AsignacionSwitch();
             Parea("S_Parentesis_Derecho");
             Parea("S_Llave_Izquierda");
             //CUERPO SWITCH
             CuerpoSwitch();
             Parea("S_Llave_Derecha");
-            //lista
             ListaDeclaracion();
+        }
+
+        public void AsignacionSwitch()
+        {
+            if (preAnalisis.Lexema.Equals(variableSwitch))
+            {
+                Parea(preAnalisis.Descripcion);
+            }
+            else
+            {
+                this.lex = ">>Error sintactico: La variable [" + preAnalisis.Lexema + "] no esta declarada";
+                SintacticoControlador.Instancia.agregarError(preAnalisis.Descripcion, this.lex, preAnalisis.Fila, preAnalisis.Columna);
+                this.tok = "";
+                errorSintactico = true;
+            }
         }
 
         public void CuerpoSwitch()
         {
             if (preAnalisis.Descripcion.Equals("PR_case"))
             {
-                Parea("PR_case");
-                IdentificadorCase();
-                Parea("S_Dos_puntos");
-                ListaDeclaracion();
-                Parea("PR_break");
-                Parea("S_Punto_y_Coma");
-                DefaultSwitch();
-            }
-        }
+                //va armando la traduccion del switch
+                if (iteracionesSwitch == 0) { cuerpoSwitch = cuerpoCase + " if " + variableSwitch; iteracionesSwitch = 1; }
+                else { cuerpoSwitch = cuerpoCase + "else if " + variableSwitch; }
 
-        public void IdentificadorCase()
-        {
-            if (preAnalisis.Descripcion.Equals("Cadena"))
-            {
-                Parea("Cadena");
+
+                Parea(preAnalisis.Descripcion);
+                //verifica si concuerdan los tipos, es decir que el caso a analizar concuerde con el tipo de variable
+                //
+                //  String texto = ""; ----> como la variable declarada es string
+                //
+                //  switch(texto){
+                //      case "":  ---> la variable del case debe ser igual a string   
+                //
+                if ((preAnalisis.Descripcion.Equals("Cadena") && (tipoInicio.Equals("PR_string") || tipoInicio.Equals("PR_char"))) ||
+                    (preAnalisis.Descripcion.Equals("Digito") && (tipoInicio.Equals("PR_int") || tipoInicio.Equals("PR_float"))))
+                {
+                    cuerpoSwitch = cuerpoSwitch + " == " + preAnalisis.Lexema;
+                    Parea(preAnalisis.Descripcion);
+                    if (preAnalisis.Descripcion.Equals("S_Dos_puntos"))
+                    {
+                        cuerpoSwitch = cuerpoSwitch + ":";
+                        Parea(preAnalisis.Descripcion);
+                        CuerpoCase();
+
+
+                        //envia a la traduccion
+                        //  traduccion(cuerpoSwitch  + "\n" + cuerpoCase);
+                        if (errorSintactico == false)
+                        {
+                            if (preAnalisis.Descripcion.Equals("PR_break"))
+                            {
+                                Parea(preAnalisis.Descripcion);
+                                if (preAnalisis.Descripcion.Equals("S_Punto_y_Coma"))
+                                {
+                                    Parea(preAnalisis.Descripcion);
+                                    CuerpoSwitch();
+                                }
+                                else
+                                {
+                                    this.lex = ">>Error Sintactico: Se esperaban punto y coma en lugar de [" + preAnalisis.Descripcion + " ]";
+                                    SintacticoControlador.Instancia.agregarError(preAnalisis.Descripcion, this.lex, preAnalisis.Fila, preAnalisis.Columna);
+                                    this.tok = "";
+                                    errorSintactico = true;
+                                }
+                            }
+                            else
+                            {
+                                this.lex = ">>Error Sintactico: Se esperaban palabra reservada BREAK en lugar de [" + preAnalisis.Descripcion + " ]";
+                                SintacticoControlador.Instancia.agregarError(preAnalisis.Descripcion, this.lex, preAnalisis.Fila, preAnalisis.Columna);
+                                this.tok = "";
+                                errorSintactico = true;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        this.lex = ">>Error Sintactico: Se esperaban dos puntos el lugar de [" + preAnalisis.Descripcion + " ]";
+                        SintacticoControlador.Instancia.agregarError(preAnalisis.Descripcion, this.lex, preAnalisis.Fila, preAnalisis.Columna);
+                        this.tok = "";
+                        errorSintactico = true;
+                    }
+                }
+                else
+                {
+                    this.lex = ">>Error Sintactico: El tipo de variable [ " + tipoInicio + "] no concuerda con el tipo de evaluacion [ " + preAnalisis.Descripcion + " ] del case";
+                    SintacticoControlador.Instancia.agregarError(preAnalisis.Descripcion, this.lex, preAnalisis.Fila, preAnalisis.Columna);
+                    this.tok = "";
+                    errorSintactico = true;
+                }
             }
-            else if (preAnalisis.Descripcion.Equals("Digito"))
+            else if (preAnalisis.Descripcion.Equals("PR_default"))
             {
-                Parea("Digito");
+                Parea(preAnalisis.Descripcion);
+
+                if (preAnalisis.Descripcion.Equals("S_Dos_puntos"))
+                {
+                    cuerpoSwitch = "else" + ":";
+                    Parea(preAnalisis.Descripcion);
+                    ListaDeclaracion();
+                    //envia a la traduccion
+                    //traduccion(cuerpoSwitch + "\n" + cuerpoCase);
+                    if (errorSintactico == false)
+                    {
+                        if (preAnalisis.Descripcion.Equals("PR_break"))
+                        {
+                            Parea(preAnalisis.Descripcion);
+                            if (preAnalisis.Descripcion.Equals("S_Punto_y_Coma"))
+                            {
+                                Parea(preAnalisis.Descripcion);
+                                CuerpoSwitch();
+                            }
+                            else
+                            {
+                                this.lex = ">>Error Sintactico: Se esperaban punto y coma en lugar de [" + preAnalisis.Descripcion + " ]";
+                                SintacticoControlador.Instancia.agregarError(preAnalisis.Descripcion, this.lex, preAnalisis.Fila, preAnalisis.Columna);
+                                this.tok = "";
+                                errorSintactico = true;
+                            }
+                        }
+                        else
+                        {
+                            this.lex = ">>Error Sintactico: Se esperaban palabra reservada BREAK en lugar de [" + preAnalisis.Descripcion + " ]";
+                            SintacticoControlador.Instancia.agregarError(preAnalisis.Descripcion, this.lex, preAnalisis.Fila, preAnalisis.Columna);
+                            this.tok = "";
+                            errorSintactico = true;
+                        }
+                    }
+                }
+                else
+                {
+                    this.lex = ">>Error Sintactico: Se esperaban dos puntos el lugar de [" + preAnalisis.Descripcion + " ]";
+                    SintacticoControlador.Instancia.agregarError(preAnalisis.Descripcion, this.lex, preAnalisis.Fila, preAnalisis.Columna);
+                    this.tok = "";
+                    errorSintactico = true;
+                }
+
+            }
+            else if (preAnalisis.Descripcion.Equals("S_Llave_Derecha"))
+            {
+
             }
             else
             {
-                this.lex = ">> Error sintactico se esperaba [ Cadena o Digito ] en lugar de [" + preAnalisis.Descripcion + ", " + preAnalisis.Lexema + "]";
+                this.lex = ">>Error Sintactico: Se esperaba palabra reservada CASE en lugar de [ " + preAnalisis.Lexema + " ]";
                 SintacticoControlador.Instancia.agregarError(preAnalisis.Descripcion, this.lex, preAnalisis.Fila, preAnalisis.Columna);
-                this.errorSintactico = true;
+                this.tok = "";
+                errorSintactico = true;
             }
         }
 
-        public void DefaultSwitch()
+        public void CuerpoCase()
         {
-            if (preAnalisis.Descripcion.Equals("PR_case"))
-            {
-                CuerpoSwitch();
-            }
-            if (preAnalisis.Descripcion.Equals("PR_default"))
-            {
-                Parea("PR_default");
-                Parea("S_Dos_puntos");
-                ListaDeclaracion();
-                Parea("PR_break");
-                Parea("S_Punto_y_Coma");
-            }
-            else
-            {
-                //EPSILON
-            }
+            ListaDeclaracion();
+
         }
         #endregion
 
@@ -1067,7 +1197,6 @@ namespace LFP_P2_TraductorC_Pyton.AnalizadorSint
             {
                 Parea("Identificador");
                 Expresion();
-
             }
             else if (preAnalisis.Descripcion.Equals("Cadena"))
             {
@@ -1088,7 +1217,8 @@ namespace LFP_P2_TraductorC_Pyton.AnalizadorSint
                 //this.errorSintactico = true;
             }*/
         }
-        public void ExpresionPrima() {
+        public void ExpresionPrima()
+        {
             if (preAnalisis.Lexema.Equals("+"))
             {
                 Parea(preAnalisis.Descripcion);
@@ -1130,7 +1260,7 @@ namespace LFP_P2_TraductorC_Pyton.AnalizadorSint
             if (preAnalisis.Lexema.Equals("*"))
             {
                 Parea(preAnalisis.Descripcion);
-                EvaluaSigiente(preAnalisis.Descripcion);   
+                EvaluaSigiente(preAnalisis.Descripcion);
             }
             else if (preAnalisis.Lexema.Equals("/"))
             {
@@ -1172,7 +1302,7 @@ namespace LFP_P2_TraductorC_Pyton.AnalizadorSint
             else if (preAnalisis.Descripcion.Equals("Identificador"))
             {
                 Parea(preAnalisis.Descripcion);
-                
+                arreglo();
                 if (preAnalisis.Descripcion.Equals("S_Punto"))
                 {
                     Parea("S_Punto");
@@ -1186,13 +1316,13 @@ namespace LFP_P2_TraductorC_Pyton.AnalizadorSint
                         SintacticoControlador.Instancia.agregarError(preAnalisis.Descripcion, this.lex, preAnalisis.Fila, preAnalisis.Columna);
                         this.errorSintactico = true;
                     }
-                } 
+                }
                 else
                 {
 
                     //Epsiolon
-                }    
-             
+                }
+
 
             }
             else

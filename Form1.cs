@@ -39,8 +39,7 @@ namespace LFP_P2_TraductorC_Pyton
 
         private void Analizar_Click(object sender, EventArgs e)
         {
-            TokenControlador.Instancia.clearListaTokensError();
-            TokenControlador.Instancia.clearListaTokens();
+            TokenControlador.Instancia.resetClass();
             TraductorControlador.Instancia.clearTokensTraducidos();
             TablaTraduccionControlador.Instancia.clearTabla();
 
@@ -52,16 +51,15 @@ namespace LFP_P2_TraductorC_Pyton
             {
 
                 AnalizadorLexico.Instancia.analizador_Lexico(textAnalizar.Text);
-                ArrayList a = TokenControlador.Instancia.getArrayListTokens();
-                ArrayList b = TokenControlador.Instancia.getArrayListErrors();
                 ArrayList arrayTraduccion = TablaTraduccionControlador.Instancia.getTabla();
 
 
 
-                if (b.Count == 0)
+                if (TokenControlador.Instancia.ArrayListErrors.Count == 0)
                 {
-                    AnalizadorSintactico.Instancia.obtenerLista(a);
-                    TraductorControlador.Instancia.obtenerLista(a);
+                    AnalizadorSintactico.Instancia.obtenerLista(TokenControlador.Instancia.ArrayListTokens);
+                    TraductorControlador.Instancia.obtenerLista(TokenControlador.Instancia.ArrayListTokens);
+
                     this.consolaTexto.Text = "";
                     this.consolaTexto.AppendText(AnalizadorSintactico.Instancia.returnT());
                     this.richTraduccion.Text = "";
@@ -173,13 +171,7 @@ namespace LFP_P2_TraductorC_Pyton
         public string textoMostrar = "";
         private void MaterialFlatButton1_Click(object sender, EventArgs e)
         {
-            /*ArrayList ar = TraductorControlador.Instancia.getTokensTraducidos();
-
-            var cadena = "";
-            for (int i = 0; i < ar.Count; i++)
-            {
-                richTraduccion.AppendText(ar[i].ToString());
-            }*/
+            ParametrosGuardado("py", "Py", richTraduccion);
         }
 
         public void alertMessage(String mensaje)
@@ -224,23 +216,27 @@ namespace LFP_P2_TraductorC_Pyton
         }
         private void GuardarToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            ParametrosGuardado("cs", "Cs", textAnalizar);
+        }
+        public void ParametrosGuardado(string minusExt, string mayusExt, RichTextBox nombreRich)
+        {
             if (File.Exists(nombreArc))
             {
                 String dir = nombreArc;
                 StreamWriter streamWriter = new StreamWriter(@dir);
                 try
                 {
-                    
-                        try
-                        {
-                            streamWriter.WriteLine(textAnalizar.Text);
-                            streamWriter.WriteLine("\n");
-                        }
-                        catch (Exception)
-                        {
-                            alertMessage("Ha ocurrido un error D:");
-                        }
-                    
+
+                    try
+                    {
+                        streamWriter.WriteLine(nombreRich.Text);
+                        streamWriter.WriteLine("\n");
+                    }
+                    catch (Exception)
+                    {
+                        alertMessage("Ha ocurrido un error D:");
+                    }
+
                 }
                 catch (Exception) { }
                 streamWriter.Close();
@@ -248,9 +244,9 @@ namespace LFP_P2_TraductorC_Pyton
             else
             {
                 SaveFileDialog saveFileDialog = new SaveFileDialog();
-                saveFileDialog.Title = "Save Org Files";
-                saveFileDialog.DefaultExt = "cs";
-                saveFileDialog.Filter = "Cs files (*.cs)|*.cs";
+                saveFileDialog.Title = "Save" + mayusExt +  "Files";
+                saveFileDialog.DefaultExt = minusExt;
+                saveFileDialog.Filter = mayusExt+" files (*."+ minusExt + ")|*."+ minusExt + "";
                 saveFileDialog.FilterIndex = 2;
                 saveFileDialog.RestoreDirectory = true;
                 saveFileDialog.FileName = nombreArc;
@@ -262,17 +258,17 @@ namespace LFP_P2_TraductorC_Pyton
                     nombreArc = dir;
                     try
                     {
-                            try
-                            {
-                                streamWriter.WriteLine(textAnalizar.Text);
-                                streamWriter.WriteLine("\n");
-                            }
-                            catch (Exception)
-                            {
-                                alertMessage("Ha ocurrido un error D:");
+                        try
+                        {
+                            streamWriter.WriteLine(nombreRich.Text);
+                            streamWriter.WriteLine("\n");
+                        }
+                        catch (Exception)
+                        {
+                            alertMessage("Ha ocurrido un error D:");
 
-                            }
-                        
+                        }
+
                     }
                     catch
                     {
@@ -282,41 +278,28 @@ namespace LFP_P2_TraductorC_Pyton
                 }
             }
         }
-
         #endregion
 
         #region MENU DOCUMENTO
 
         private void ReporteTokensToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (nombreArc == "" && tempNombreArc == "")
-            {
-                TokenControlador.Instancia.ImprimirVacia("Archivo");
-            }
-            else if (!(nombreArc == "") && (nombreArc == tempNombreArc))
-            {
-                TokenControlador.Instancia.ImprimirTokens(nombreArc);
-            }
-            else
-            {
-                TokenControlador.Instancia.ImprimirTokens("NoArchivo");
-            }
+            ReporteControlador.Instancia.getReportTokens();
+        }
+
+        private void TablaDeSimbolosToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ReporteControlador.Instancia.getTablaSimbolos();
+        }
+
+        private void ReporteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ReporteControlador.Instancia.getReporteError();
         }
 
         private void ReporteErroresLexicosToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (nombreArc == "" && tempNombreArc == "")
-            {
-                TokenControlador.Instancia.ImprimirVacia("Archivo");
-            }
-            else if (!(nombreArc == "") && (nombreArc == tempNombreArc))
-            {
-                TokenControlador.Instancia.ImprimirErrores(nombreArc);
-            }
-            else
-            {
-                TokenControlador.Instancia.ImprimirErrores("NoArchivo");
-            }
+           
         }
         private void LimpiaDocumentosRecientesToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -324,18 +307,16 @@ namespace LFP_P2_TraductorC_Pyton
             tempNombreArc = "";
             ambito = 0;
             tab = "";
-            TokenControlador.Instancia.clearListaTokensError();
-            TokenControlador.Instancia.clearListaTokens();
+            TokenControlador.Instancia.resetClass();
             TraductorControlador.Instancia.clearTokensTraducidos();
             TablaTraduccionControlador.Instancia.clearTabla();
+            SimboloControlador.Instancia.clearArrayListSimbolo();
             this.consolaTexto.Text = "";
             this.richTraduccion.Text = "";
             this.textAnalizar.Text = "";
         }
 
-
         #endregion
-
 
 
     }

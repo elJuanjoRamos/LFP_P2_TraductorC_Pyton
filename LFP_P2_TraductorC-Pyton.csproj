@@ -51,6 +51,7 @@
   <ItemGroup>
     <Compile Include="AnalizadorLex\AnalizadorLexico.cs" />
     <Compile Include="AnalizadorSint\AnalizadorSintactico.cs" />
+    <Compile Include="Controladores\ReporteControlador.cs" />
     <Compile Include="Controladores\SimboloControlador.cs" />
     <Compile Include="Controladores\SintacticoControlador.cs" />
     <Compile Include="Controladores\TablaTraduccionControlador.cs" />
