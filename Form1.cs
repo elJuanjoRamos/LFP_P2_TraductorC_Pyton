@@ -18,7 +18,7 @@ using System.IO;
 
 namespace LFP_P2_TraductorC_Pyton
 {
-    public partial class Form1 : MaterialForm
+    public partial class Form1 : Form
     {
         public Form1()
         {
@@ -32,7 +32,7 @@ namespace LFP_P2_TraductorC_Pyton
         private void Form1_Load(object sender, EventArgs e)
         {
             textAnalizar.Language = FastColoredTextBoxNS.Language.CSharp;
-            //richTraduccion.Language = FastColoredTextBoxNS.Language.JS;
+            //richTraduccion.Language = FastColoredTextBoxNS.Language.Lua;
 
         }
 

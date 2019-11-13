@@ -1,7 +1,0 @@
-digraph G {rankdir = LR 
-Inicio[shape = box, color = blue] 
-"hola"[shape = box, color = blue] 
-"mundio"[shape = box, color = blue] 
-"adios"[shape = box, color = blue] 
-
-Fin[shape = box, color = blue] Inicio->"hola"->"mundio"->"adios"->Fin}

@@ -439,7 +439,7 @@ namespace LFP_P2_TraductorC_Pyton.Controladores
                 else if (flagToken.Descripcion.Equals("S_Llave_Derecha"))
                 {
                     //Envia hasta el final el aumento del for
-                    /*if (inicioDeclaracion.Equals("PR_for") && vieneFor)
+                    if (inicioDeclaracion.Equals("PR_for") )
                     {
                         Console.WriteLine(finalFor);
                         if (finalFor.Contains("++"))
@@ -452,7 +452,7 @@ namespace LFP_P2_TraductorC_Pyton.Controladores
                             finalFor = finalFor.Replace("--", "-= 1");
                         }
                         TablaTraduccionControlador.Instancia.agregar(tabs + " "+finalFor, "for");
-                    }*/
+                    }
                     variableSwitch = "";
                     tokenAnterior = "";
                     ambito--;

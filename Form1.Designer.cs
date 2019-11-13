@@ -31,11 +31,8 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.consolaTexto = new System.Windows.Forms.RichTextBox();
-            this.materialLabel1 = new MaterialSkin.Controls.MaterialLabel();
-            this.materialLabel2 = new MaterialSkin.Controls.MaterialLabel();
             this.analizar = new MaterialSkin.Controls.MaterialFlatButton();
             this.traduccion = new MaterialSkin.Controls.MaterialFlatButton();
-            this.materialLabel3 = new MaterialSkin.Controls.MaterialLabel();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.archivoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.abrirToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -47,11 +44,14 @@
             this.reporteErroresLexicosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.reporteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tablaDeSimbolosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.graficaDeVectoresToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.limpiaDocumentosRecientesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ayudaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.textAnalizar = new FastColoredTextBoxNS.FastColoredTextBox();
             this.richTraduccion = new System.Windows.Forms.RichTextBox();
-            this.graficaDeVectoresToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.textAnalizar = new FastColoredTextBoxNS.FastColoredTextBox();
+            this.materialLabel1 = new MaterialSkin.Controls.MaterialLabel();
+            this.materialLabel3 = new MaterialSkin.Controls.MaterialLabel();
+            this.materialLabel2 = new MaterialSkin.Controls.MaterialLabel();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.textAnalizar)).BeginInit();
             this.SuspendLayout();
@@ -63,32 +63,6 @@
             this.consolaTexto.Size = new System.Drawing.Size(862, 159);
             this.consolaTexto.TabIndex = 1;
             this.consolaTexto.Text = "";
-            // 
-            // materialLabel1
-            // 
-            this.materialLabel1.AutoSize = true;
-            this.materialLabel1.Depth = 0;
-            this.materialLabel1.Font = new System.Drawing.Font("Roboto", 11F);
-            this.materialLabel1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.materialLabel1.Location = new System.Drawing.Point(30, 615);
-            this.materialLabel1.MouseState = MaterialSkin.MouseState.HOVER;
-            this.materialLabel1.Name = "materialLabel1";
-            this.materialLabel1.Size = new System.Drawing.Size(79, 24);
-            this.materialLabel1.TabIndex = 2;
-            this.materialLabel1.Text = "Consola";
-            // 
-            // materialLabel2
-            // 
-            this.materialLabel2.AutoSize = true;
-            this.materialLabel2.Depth = 0;
-            this.materialLabel2.Font = new System.Drawing.Font("Roboto", 11F);
-            this.materialLabel2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.materialLabel2.Location = new System.Drawing.Point(30, 168);
-            this.materialLabel2.MouseState = MaterialSkin.MouseState.HOVER;
-            this.materialLabel2.Name = "materialLabel2";
-            this.materialLabel2.Size = new System.Drawing.Size(57, 24);
-            this.materialLabel2.TabIndex = 3;
-            this.materialLabel2.Text = "Texto";
             // 
             // analizar
             // 
@@ -122,19 +96,6 @@
             this.traduccion.UseVisualStyleBackColor = true;
             this.traduccion.Click += new System.EventHandler(this.MaterialFlatButton1_Click);
             // 
-            // materialLabel3
-            // 
-            this.materialLabel3.AutoSize = true;
-            this.materialLabel3.Depth = 0;
-            this.materialLabel3.Font = new System.Drawing.Font("Roboto", 11F);
-            this.materialLabel3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.materialLabel3.Location = new System.Drawing.Point(918, 167);
-            this.materialLabel3.MouseState = MaterialSkin.MouseState.HOVER;
-            this.materialLabel3.Name = "materialLabel3";
-            this.materialLabel3.Size = new System.Drawing.Size(104, 24);
-            this.materialLabel3.TabIndex = 7;
-            this.materialLabel3.Text = "Traduccion";
-            // 
             // menuStrip1
             // 
             this.menuStrip1.Dock = System.Windows.Forms.DockStyle.None;
@@ -146,7 +107,7 @@
             this.menuStrip1.Location = new System.Drawing.Point(9, 81);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            this.menuStrip1.Size = new System.Drawing.Size(397, 28);
+            this.menuStrip1.Size = new System.Drawing.Size(247, 28);
             this.menuStrip1.TabIndex = 8;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -157,7 +118,7 @@
             this.guardarToolStripMenuItem,
             this.salirToolStripMenuItem});
             this.archivoToolStripMenuItem.Name = "archivoToolStripMenuItem";
-            this.archivoToolStripMenuItem.Size = new System.Drawing.Size(73, 26);
+            this.archivoToolStripMenuItem.Size = new System.Drawing.Size(73, 24);
             this.archivoToolStripMenuItem.Text = "Archivo";
             // 
             // abrirToolStripMenuItem
@@ -229,6 +190,13 @@
             this.tablaDeSimbolosToolStripMenuItem.Text = "Tabla de Simbolos";
             this.tablaDeSimbolosToolStripMenuItem.Click += new System.EventHandler(this.TablaDeSimbolosToolStripMenuItem_Click);
             // 
+            // graficaDeVectoresToolStripMenuItem
+            // 
+            this.graficaDeVectoresToolStripMenuItem.Name = "graficaDeVectoresToolStripMenuItem";
+            this.graficaDeVectoresToolStripMenuItem.Size = new System.Drawing.Size(269, 26);
+            this.graficaDeVectoresToolStripMenuItem.Text = "Grafica de Vectores";
+            this.graficaDeVectoresToolStripMenuItem.Click += new System.EventHandler(this.GraficaDeVectoresToolStripMenuItem_Click);
+            // 
             // limpiaDocumentosRecientesToolStripMenuItem
             // 
             this.limpiaDocumentosRecientesToolStripMenuItem.Name = "limpiaDocumentosRecientesToolStripMenuItem";
@@ -239,8 +207,16 @@
             // ayudaToolStripMenuItem
             // 
             this.ayudaToolStripMenuItem.Name = "ayudaToolStripMenuItem";
-            this.ayudaToolStripMenuItem.Size = new System.Drawing.Size(65, 26);
+            this.ayudaToolStripMenuItem.Size = new System.Drawing.Size(65, 24);
             this.ayudaToolStripMenuItem.Text = "Ayuda";
+            // 
+            // richTraduccion
+            // 
+            this.richTraduccion.Location = new System.Drawing.Point(922, 207);
+            this.richTraduccion.Name = "richTraduccion";
+            this.richTraduccion.Size = new System.Drawing.Size(557, 594);
+            this.richTraduccion.TabIndex = 10;
+            this.richTraduccion.Text = "";
             // 
             // textAnalizar
             // 
@@ -263,6 +239,7 @@
             this.textAnalizar.CharWidth = 10;
             this.textAnalizar.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.textAnalizar.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
+            this.textAnalizar.Font = new System.Drawing.Font("Courier New", 9.75F);
             this.textAnalizar.IsReplaceMode = false;
             this.textAnalizar.Location = new System.Drawing.Point(34, 207);
             this.textAnalizar.Name = "textAnalizar";
@@ -273,26 +250,50 @@
             this.textAnalizar.TabIndex = 9;
             this.textAnalizar.Zoom = 100;
             // 
-            // richTraduccion
+            // materialLabel1
             // 
-            this.richTraduccion.Location = new System.Drawing.Point(922, 207);
-            this.richTraduccion.Name = "richTraduccion";
-            this.richTraduccion.Size = new System.Drawing.Size(557, 594);
-            this.richTraduccion.TabIndex = 10;
-            this.richTraduccion.Text = "";
+            this.materialLabel1.AutoSize = true;
+            this.materialLabel1.Depth = 0;
+            this.materialLabel1.Font = new System.Drawing.Font("Roboto", 11F);
+            this.materialLabel1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.materialLabel1.Location = new System.Drawing.Point(30, 615);
+            this.materialLabel1.MouseState = MaterialSkin.MouseState.HOVER;
+            this.materialLabel1.Name = "materialLabel1";
+            this.materialLabel1.Size = new System.Drawing.Size(79, 24);
+            this.materialLabel1.TabIndex = 2;
+            this.materialLabel1.Text = "Consola";
             // 
-            // graficaDeVectoresToolStripMenuItem
+            // materialLabel3
             // 
-            this.graficaDeVectoresToolStripMenuItem.Name = "graficaDeVectoresToolStripMenuItem";
-            this.graficaDeVectoresToolStripMenuItem.Size = new System.Drawing.Size(269, 26);
-            this.graficaDeVectoresToolStripMenuItem.Text = "Grafica de Vectores";
-            this.graficaDeVectoresToolStripMenuItem.Click += new System.EventHandler(this.GraficaDeVectoresToolStripMenuItem_Click);
+            this.materialLabel3.AutoSize = true;
+            this.materialLabel3.Depth = 0;
+            this.materialLabel3.Font = new System.Drawing.Font("Roboto", 11F);
+            this.materialLabel3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.materialLabel3.Location = new System.Drawing.Point(918, 167);
+            this.materialLabel3.MouseState = MaterialSkin.MouseState.HOVER;
+            this.materialLabel3.Name = "materialLabel3";
+            this.materialLabel3.Size = new System.Drawing.Size(104, 24);
+            this.materialLabel3.TabIndex = 7;
+            this.materialLabel3.Text = "Traduccion";
+            // 
+            // materialLabel2
+            // 
+            this.materialLabel2.AutoSize = true;
+            this.materialLabel2.Depth = 0;
+            this.materialLabel2.Font = new System.Drawing.Font("Roboto", 11F);
+            this.materialLabel2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.materialLabel2.Location = new System.Drawing.Point(30, 168);
+            this.materialLabel2.MouseState = MaterialSkin.MouseState.HOVER;
+            this.materialLabel2.Name = "materialLabel2";
+            this.materialLabel2.Size = new System.Drawing.Size(57, 24);
+            this.materialLabel2.TabIndex = 3;
+            this.materialLabel2.Text = "Texto";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1519, 863);
+            this.ClientSize = new System.Drawing.Size(1920, 1055);
             this.Controls.Add(this.richTraduccion);
             this.Controls.Add(this.textAnalizar);
             this.Controls.Add(this.materialLabel3);
@@ -316,11 +317,8 @@
 
         #endregion
         private System.Windows.Forms.RichTextBox consolaTexto;
-        private MaterialSkin.Controls.MaterialLabel materialLabel1;
-        private MaterialSkin.Controls.MaterialLabel materialLabel2;
         private MaterialSkin.Controls.MaterialFlatButton analizar;
         private MaterialSkin.Controls.MaterialFlatButton traduccion;
-        private MaterialSkin.Controls.MaterialLabel materialLabel3;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem archivoToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem abrirToolStripMenuItem;
@@ -334,9 +332,12 @@
         private System.Windows.Forms.ToolStripMenuItem tablaDeSimbolosToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem limpiaDocumentosRecientesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem ayudaToolStripMenuItem;
-        private FastColoredTextBoxNS.FastColoredTextBox textAnalizar;
         private System.Windows.Forms.RichTextBox richTraduccion;
         private System.Windows.Forms.ToolStripMenuItem graficaDeVectoresToolStripMenuItem;
+        private FastColoredTextBoxNS.FastColoredTextBox textAnalizar;
+        private MaterialSkin.Controls.MaterialLabel materialLabel1;
+        private MaterialSkin.Controls.MaterialLabel materialLabel3;
+        private MaterialSkin.Controls.MaterialLabel materialLabel2;
     }
 }
 
