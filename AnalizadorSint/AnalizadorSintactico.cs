@@ -226,10 +226,15 @@ namespace LFP_P2_TraductorC_Pyton.AnalizadorSint
                 SimboloControlador.Instancia.agregarSimbolo(this.lexemaAuxiliar, preAnalisis.Lexema, tokenInicio.Replace("PR_", ""));
                 Parea("Digito");
             }
-            else if (preAnalisis.Descripcion.Equals("Cadena") && (tokenInicio.Equals("PR_char") || tokenInicio.Equals("PR_string")))
+            else if (preAnalisis.Descripcion.Equals("Cadena") && tokenInicio.Equals("PR_string"))
             {
                 SimboloControlador.Instancia.agregarSimbolo(this.lexemaAuxiliar, preAnalisis.Lexema, tokenInicio.Replace("PR_", ""));
                 Parea("Cadena");
+            }
+            else if (preAnalisis.Descripcion.Equals("Character") && (tokenInicio.Equals("PR_char")))
+            {
+                SimboloControlador.Instancia.agregarSimbolo(this.lexemaAuxiliar, preAnalisis.Lexema, tokenInicio.Replace("PR_", ""));
+                Parea("Character");
             }
             else if (preAnalisis.Descripcion.Equals("Identificador") && (tokenInicio.Equals("PR_bool") || tokenInicio.Equals("PR_boolean")))
             {
@@ -350,6 +355,12 @@ namespace LFP_P2_TraductorC_Pyton.AnalizadorSint
             else if (preAnalisis.Descripcion.Equals("Cadena"))
             {
                 Parea("Cadena");
+                AnidarElementos();
+                ListaValor1();
+            }
+            else if (preAnalisis.Descripcion.Equals("Character"))
+            {
+                Parea("Character");
                 AnidarElementos();
                 ListaValor1();
             }
@@ -1050,7 +1061,8 @@ namespace LFP_P2_TraductorC_Pyton.AnalizadorSint
                 //  switch(texto){
                 //      case "":  ---> la variable del case debe ser igual a string   
                 //
-                if ((preAnalisis.Descripcion.Equals("Cadena") && (tipoInicio.Equals("PR_string") || tipoInicio.Equals("PR_char"))) ||
+                if ((preAnalisis.Descripcion.Equals("Cadena") && (tipoInicio.Equals("PR_string"))) ||
+                    (preAnalisis.Descripcion.Equals("Character") && (tipoInicio.Equals("PR_char"))) ||
                     (preAnalisis.Descripcion.Equals("Digito") && (tipoInicio.Equals("PR_int") || tipoInicio.Equals("PR_float"))))
                 {
                     cuerpoSwitch = cuerpoSwitch + " == " + preAnalisis.Lexema;

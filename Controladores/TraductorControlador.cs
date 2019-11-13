@@ -74,7 +74,6 @@ namespace LFP_P2_TraductorC_Pyton.Controladores
             {
                 flagToken = (Token)listaTokens[i];
 
-                Console.WriteLine("el token actual  " + flagToken.Lexema + " no " + i);
                 #region TRADUCCION FOR
                 if (flagToken.Descripcion.Equals("PR_for"))
                 {
@@ -155,40 +154,18 @@ namespace LFP_P2_TraductorC_Pyton.Controladores
                             if (temp.Lexema.Equals(";"))
                             {
                                 Parea(temp.Descripcion);
-
-
-                                if (cadenaVariable.Contains(","))
+                                if (((Token)listaTokens[j - 1]).Descripcion.Equals("Identificador") && ((Token)listaTokens[j - 2]).Descripcion.Contains("PR_"))
+                                {
+                                    EnviarTablaSimbolo(tabs + ((Token)listaTokens[j - 1]).Lexema, tipoVariable, "");
+                                }else if (cadenaVariable.Contains(","))
                                 {
                                     string[] words = cadenaVariable.Split(',');
                                     for (int n = 0; n < words.Length; n++)
                                     {
                                         if (!words[n].Contains("="))
                                         {
-                                            if (tipoVariable.ToLower().Equals("int"))
-                                            {
-                                                TablaTraduccionControlador.Instancia.agregar(tabs + words[n] + " = 0", "variable");
-                                                SimboloControlador.Instancia.agregarSimbolo(words[n], "0", tipoVariable);
-                                            }
-                                            else if (tipoVariable.ToLower().Equals("string"))
-                                            {
-                                                TablaTraduccionControlador.Instancia.agregar(tabs + words[n] + " = "+ "\" " + "\"", "variable");
-                                                SimboloControlador.Instancia.agregarSimbolo(words[n], "\"" + "\"", tipoVariable);
-                                            }
-                                            else if (tipoVariable.ToLower().Equals("float") || tipoVariable.ToLower().Equals("double"))
-                                            {
-                                                TablaTraduccionControlador.Instancia.agregar(tabs + words[n] + " = 0.0", "variable");
-                                                SimboloControlador.Instancia.agregarSimbolo(words[n], "0.0", tipoVariable);
-                                            }
-                                            else if (tipoVariable.ToLower().Equals("bool") || tipoVariable.ToLower().Equals("boolean"))
-                                            {
-                                                TablaTraduccionControlador.Instancia.agregar(tabs + words[n] + " = false" , "variable");
-                                                SimboloControlador.Instancia.agregarSimbolo(words[n], "fale", tipoVariable);
-                                            }
-                                            else if (tipoVariable.ToLower().Equals("char") )
-                                            {
-                                                TablaTraduccionControlador.Instancia.agregar(tabs + words[n] + " = ' '" , "variable");
-                                                SimboloControlador.Instancia.agregarSimbolo(words[n], "' '", tipoVariable);
-                                            }
+                                            EnviarTablaSimbolo(tabs + words[n], tipoVariable, "");
+                                            
                                         }
                                         else
                                         {
@@ -208,7 +185,7 @@ namespace LFP_P2_TraductorC_Pyton.Controladores
                             }
                             else
                             {
-                                cadenaVariable = cadenaVariable + " " + temp.Lexema;
+                                cadenaVariable = cadenaVariable + temp.Lexema;
                                 Parea(temp.Descripcion);
 
                             }
@@ -218,6 +195,12 @@ namespace LFP_P2_TraductorC_Pyton.Controladores
                     //SE VA A ARREGLO
                     else if (flagToken.Lexema.Equals("["))
                     {
+
+                        #region TABLA SIMBOLO 
+
+
+                        #endregion
+
                         Parea(flagToken.Descripcion);
                         for (int j = i+2; j < listaTokens.Count; j++)
                         {
@@ -228,6 +211,8 @@ namespace LFP_P2_TraductorC_Pyton.Controladores
                                 cadenaVariable = cadenaVariable.Replace("{", "[");
                                 cadenaVariable = cadenaVariable.Replace("}", "]");
                                 TablaTraduccionControlador.Instancia.agregar(tabs + cadenaVariable, "array");
+                                string[] partesArreglo = cadenaVariable.Split('=');
+                                EnviarTablaSimbolo(partesArreglo[0], "array", partesArreglo[1]);
                                 i = j;
                                 bandera = "";
                                 cadenaVariable = "";
@@ -241,7 +226,7 @@ namespace LFP_P2_TraductorC_Pyton.Controladores
                                 }
                                 else
                                 {
-                                    cadenaVariable = cadenaVariable + " " + temp.Lexema;
+                                    cadenaVariable = cadenaVariable + temp.Lexema;
                                     Parea(temp.Descripcion);
                                 }
                             }
@@ -341,7 +326,7 @@ namespace LFP_P2_TraductorC_Pyton.Controladores
                 #region TRADUCCION CONSOLE WRITELINE
                 if (flagToken.Descripcion.Equals("PR_Console"))
                 {
-                    tokenInicio = " print(";
+                    tokenInicio = "print(";
                     vieneFor = false;
                     Parea(flagToken.Descripcion);
                     for (int j = i + 4; j < listaTokens.Count; j++)
@@ -357,7 +342,7 @@ namespace LFP_P2_TraductorC_Pyton.Controladores
                         }
                         else
                         {
-                            tokenInicio = tokenInicio + " " + flagToken.Lexema;
+                            tokenInicio = tokenInicio + flagToken.Lexema;
                             Parea(flagToken.Descripcion);
                         }
                     }
@@ -537,6 +522,40 @@ namespace LFP_P2_TraductorC_Pyton.Controladores
         public void clearTokensTraducidos()
         {
             this.tokenInicio = "";
+        }
+
+        public void EnviarTablaSimbolo(string nombre, string tipo, string valor)
+        {
+            if (tipo.ToLower().Equals("int"))
+            {
+                TablaTraduccionControlador.Instancia.agregar(nombre + " = 0", "variable");
+                SimboloControlador.Instancia.agregarSimbolo(nombre, "0", "Int");
+            }
+            else if (tipo.ToLower().Equals("string"))
+            {
+                TablaTraduccionControlador.Instancia.agregar(nombre + " = " + "\" " + "\"", "variable");
+                SimboloControlador.Instancia.agregarSimbolo(nombre, "\"" + "\"", "String");
+            }
+            else if (tipo.ToLower().Equals("float") || tipo.ToLower().Equals("double"))
+            {
+                TablaTraduccionControlador.Instancia.agregar(nombre + " = 0.0", "variable");
+                SimboloControlador.Instancia.agregarSimbolo(nombre, "0.0", "Float");
+            }
+            else if (tipo.ToLower().Equals("bool") || tipo.ToLower().Equals("boolean"))
+            {
+                TablaTraduccionControlador.Instancia.agregar(nombre + " = false", "variable");
+                SimboloControlador.Instancia.agregarSimbolo(nombre, "fale", "Boolean");
+            }
+            else if (tipo.ToLower().Equals("char"))
+            {
+                TablaTraduccionControlador.Instancia.agregar(nombre + " = ' '", "variable");
+                SimboloControlador.Instancia.agregarSimbolo(nombre, "' '", "Char");
+            }
+            else if (tipo.ToLower().Equals("array"))
+            {
+                SimboloControlador.Instancia.agregarSimbolo(nombre, valor, "Array");
+            }
+
         }
     }
 

@@ -33,11 +33,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="FastColoredTextBox">
+      <HintPath>..\..\..\..\..\..\..\Desktop\New folder\FastColoredTextBox-master\FastColoredTextBox-master\Binary\FastColoredTextBox.dll</HintPath>
+    </Reference>
     <Reference Include="MaterialSkin, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\MaterialSkin.0.2.1\lib\MaterialSkin.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Design" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -51,6 +55,7 @@
   <ItemGroup>
     <Compile Include="AnalizadorLex\AnalizadorLexico.cs" />
     <Compile Include="AnalizadorSint\AnalizadorSintactico.cs" />
+    <Compile Include="Controladores\GrafoControlador.cs" />
     <Compile Include="Controladores\ReporteControlador.cs" />
     <Compile Include="Controladores\SimboloControlador.cs" />
     <Compile Include="Controladores\SintacticoControlador.cs" />

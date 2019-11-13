@@ -22,3 +22,5 @@ C:\Users\Juan José Ramos\Documents\USAC\2.Segundo Año\CUARTO SEMESTRE\LENGUAJE
 C:\Users\Juan José Ramos\Documents\USAC\2.Segundo Año\CUARTO SEMESTRE\LENGUAJES FORMALES\LFP_P2_TraductorC-Pyton\LFP_P2_TraductorC_Pyton\obj\Debug\LFP_P2_TraductorC-Pyton.csproj.CopyComplete
 C:\Users\Juan José Ramos\Documents\USAC\2.Segundo Año\CUARTO SEMESTRE\LENGUAJES FORMALES\LFP_P2_TraductorC-Pyton\LFP_P2_TraductorC_Pyton\obj\Debug\LFP_P2_TraductorC-Pyton.exe
 C:\Users\Juan José Ramos\Documents\USAC\2.Segundo Año\CUARTO SEMESTRE\LENGUAJES FORMALES\LFP_P2_TraductorC-Pyton\LFP_P2_TraductorC_Pyton\obj\Debug\LFP_P2_TraductorC-Pyton.pdb
+C:\Users\Juan José Ramos\Documents\USAC\2.Segundo Año\CUARTO SEMESTRE\LENGUAJES FORMALES\LFP_P2_TraductorC-Pyton\LFP_P2_TraductorC_Pyton\bin\Debug\FastColoredTextBox.dll
+C:\Users\Juan José Ramos\Documents\USAC\2.Segundo Año\CUARTO SEMESTRE\LENGUAJES FORMALES\LFP_P2_TraductorC-Pyton\LFP_P2_TraductorC_Pyton\bin\Debug\FastColoredTextBox.xml

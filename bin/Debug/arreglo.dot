@@ -1,0 +1,8 @@
+digraph G {rankdir = LR 
+Inicio[shape = box, color = blue] 
+0[shape = box, color = blue] 
+2[shape = box, color = blue] 
+3[shape = box, color = blue] 
+5[shape = box, color = blue] 
+
+Fin[shape = box, color = blue] Inicio->0->2->3->5->Fin}

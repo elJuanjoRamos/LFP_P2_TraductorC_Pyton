@@ -31,6 +31,8 @@ namespace LFP_P2_TraductorC_Pyton
         public string cadenaInicio = "";
         private void Form1_Load(object sender, EventArgs e)
         {
+            textAnalizar.Language = FastColoredTextBoxNS.Language.CSharp;
+            //richTraduccion.Language = FastColoredTextBoxNS.Language.JS;
 
         }
 
@@ -171,7 +173,7 @@ namespace LFP_P2_TraductorC_Pyton
         public string textoMostrar = "";
         private void MaterialFlatButton1_Click(object sender, EventArgs e)
         {
-            ParametrosGuardado("py", "Py", richTraduccion);
+            ParametrosGuardado("py", "Py", richTraduccion.Text);
         }
 
         public void alertMessage(String mensaje)
@@ -216,9 +218,9 @@ namespace LFP_P2_TraductorC_Pyton
         }
         private void GuardarToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ParametrosGuardado("cs", "Cs", textAnalizar);
+            ParametrosGuardado("cs", "Cs", textAnalizar.Text);
         }
-        public void ParametrosGuardado(string minusExt, string mayusExt, RichTextBox nombreRich)
+        public void ParametrosGuardado(string minusExt, string mayusExt, string text)
         {
             if (File.Exists(nombreArc))
             {
@@ -229,7 +231,7 @@ namespace LFP_P2_TraductorC_Pyton
 
                     try
                     {
-                        streamWriter.WriteLine(nombreRich.Text);
+                        streamWriter.WriteLine(text);
                         streamWriter.WriteLine("\n");
                     }
                     catch (Exception)
@@ -260,7 +262,7 @@ namespace LFP_P2_TraductorC_Pyton
                     {
                         try
                         {
-                            streamWriter.WriteLine(nombreRich.Text);
+                            streamWriter.WriteLine(text);
                             streamWriter.WriteLine("\n");
                         }
                         catch (Exception)
@@ -316,8 +318,12 @@ namespace LFP_P2_TraductorC_Pyton
             this.textAnalizar.Text = "";
         }
 
+
         #endregion
 
-
+        private void GraficaDeVectoresToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            GrafoControlador.Instancia.generarTexto(Application.StartupPath);
+        }
     }
 }

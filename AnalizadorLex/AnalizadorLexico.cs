@@ -12,7 +12,6 @@ namespace LFP_P2_TraductorC_Pyton.AnalizadorLex
     class AnalizadorLexico
     {
         private readonly static AnalizadorLexico instancia = new AnalizadorLexico();
-
         //VARIABLES GLOBALES
         string auxiliar = "";
 
@@ -28,9 +27,9 @@ namespace LFP_P2_TraductorC_Pyton.AnalizadorLex
             }
         }
 
-
-        // metodo para analizar
-
+        /**
+         * ANALIZADOR LEXICO 
+         */
         public async void analizador_Lexico(String totalTexto)
         {
             ////
@@ -63,7 +62,7 @@ namespace LFP_P2_TraductorC_Pyton.AnalizadorLex
                             }
 
                             //VERIFICA SI ES ESPACIO EN BLANCO O SALTO DE LINEA
-                            else if (c.CompareTo('\n') ==0)
+                            else if (c.Equals('\n'))
                             {
                                 opcion = 0;
                                 columna = 0;//COLUMNA 0
@@ -89,26 +88,22 @@ namespace LFP_P2_TraductorC_Pyton.AnalizadorLex
                                 {
                                     columna++;
                                     TokenControlador.Instancia.agregarToken(fila, (columna - 1), c.ToString(), "S_Menor_Que");
-                                    //TokenControlador.Instancia.agregarTokenTraducir(fila, (columna - 1), c.ToString(), "S_Menor_Que");
                                 }
                                 else if (c.Equals('>'))
                                 {
                                     columna++;
                                     TokenControlador.Instancia.agregarToken(fila, (columna - 1), c.ToString(), "S_Mayor_Que");
-                                //    TokenControlador.Instancia.agregarTokenTraducir(fila, (columna - 1), c.ToString(), "S_Mayor_Que");
 
                                 }
                                 else if (c.Equals('='))
                                 {
                                     columna++;
                                     TokenControlador.Instancia.agregarToken(fila, (columna - 1), c.ToString(), "S_Igual");
-                                    //TokenControlador.Instancia.agregarTokenTraducir(fila, (columna - 1), c.ToString(), "S_Igual");
                                 }
                                 else if (c.Equals('+'))
                                 {
                                     columna++;
                                     TokenControlador.Instancia.agregarToken(fila, (columna - 1), c.ToString(), "S_Suma");
-                                   // TokenControlador.Instancia.agregarTokenTraducir(fila, (columna - 1), c.ToString(), "S_Suma");
                                 }
 
                                 else
@@ -131,15 +126,24 @@ namespace LFP_P2_TraductorC_Pyton.AnalizadorLex
                                     i--;
                                     columna--;
                                 }
+                                /*if (c.Equals("'"))
+                                {
+                                    Console.WriteLine("entro");
+                                    columna++;
+                                    opcion = 11;
+                                    i--;
+                                    columna--;
+                                }*/
                                 else if (c.Equals(','))
                                 {
                                     TokenControlador.Instancia.agregarToken(fila, (columna - 1), c.ToString(), "S_Coma");
-                                    //TokenControlador.Instancia.agregarTokenTraducir(fila, (columna - 1), c.ToString(), "S_Coma");
+                                    /*opcion = 5;
+                                    i--;
+                                    columna--;*/
                                 }
                                 else if (c.Equals('{'))
                                 {
                                     TokenControlador.Instancia.agregarToken(fila, (columna - 1), c.ToString(), "S_Llave_Izquierda");
-                                    //TokenControlador.Instancia.agregarTokenTraducir(fila, (columna - 1), c.ToString(), "S_Llave_Izquierda");
                                 }
                                 else if (c.Equals('}'))
                                 {
@@ -148,6 +152,7 @@ namespace LFP_P2_TraductorC_Pyton.AnalizadorLex
                                 else if (c.Equals(';'))
                                 {
                                     TokenControlador.Instancia.agregarToken(fila, (columna - 1), c.ToString(), "S_Punto_y_Coma");
+
                                 }
                                 else if (c.Equals(':'))
                                 {
@@ -201,6 +206,14 @@ namespace LFP_P2_TraductorC_Pyton.AnalizadorLex
                                 {
                                     TokenControlador.Instancia.agregarToken(fila, (columna - 1), c.ToString(), "S_Excl");
                                 }
+                                else if (c.Equals('\''))
+                                {
+                                    //TokenControlador.Instancia.agregarToken(fila, (columna - 1), c.ToString(), "S_Comilla_Simple");
+                                    columna++;
+                                    opcion = 19;
+                                    i--;
+                                    columna--;
+                                }
                                 else
                                 {
                                     //Console.WriteLine("ULTIMO ELSE PUNTUACION");
@@ -234,8 +247,8 @@ namespace LFP_P2_TraductorC_Pyton.AnalizadorLex
                             else
                             {
                                 string[] reservadasC = { "class", "static", "void", "string",
-                                    "int", "new", "float", "char", "bool", "boolean", "if", "else",
-                                    "switch", "case", "break","default", "for",  "while", "null"};
+                                    "int", "new", "float", "char", "bool", "boolean", "if", "else", "default",
+                                    "switch", "case", "break", "for",  "while" };
 
                                 string[] reservadasMayus = { "Main", "Console", "WriteLine", "Count", "Length" };
 
@@ -255,6 +268,7 @@ namespace LFP_P2_TraductorC_Pyton.AnalizadorLex
                                     TokenControlador.Instancia.agregarToken(fila, (columna - auxiliar.Length), auxiliar, "Identificador");
                                     //alertMessage("Se detecto un error, Linea" + fila + " , columna " + columna);
                                 }
+
 
                                 auxiliar = "";
                                 i--;
@@ -412,8 +426,8 @@ namespace LFP_P2_TraductorC_Pyton.AnalizadorLex
                             }
                             else
                             {
+                                TokenControlador.Instancia.agregarToken(fila, (columna - auxiliar.Length), auxiliar, "ComentarioLinea");
                                 fila++; columna = 0;
-                                TokenControlador.Instancia.agregarToken(fila, (columna - auxiliar.Length), auxiliar +"\n", "ComentarioLinea");
                                 opcion = 0;
                                 auxiliar = "";
                             }
@@ -435,8 +449,46 @@ namespace LFP_P2_TraductorC_Pyton.AnalizadorLex
                             if (c == '/')
                             {
                                 auxiliar += c;
-                                //opcion = 18;
-                                TokenControlador.Instancia.agregarToken(fila, (columna - auxiliar.Length), auxiliar + "\n", "ComentarioMultiLinea");
+                                TokenControlador.Instancia.agregarToken(fila, (columna - auxiliar.Length), auxiliar, "ComentarioMultiLinea");
+                                opcion = 0;
+                                auxiliar = "";
+                            }
+                            break;
+                        case 19:
+                            if (c == '\'')
+                            {
+                                auxiliar += c;
+                                opcion = 20;
+                                columna++;
+                            }
+                            break;
+                        case 20:
+                            if (!c.Equals('\''))
+                            {
+                                auxiliar += c;
+                                opcion = 20;
+                                columna++;
+                            }
+                            else
+                            {
+                                opcion = 21;
+                                columna--;
+                                i--;
+                            }
+                            break;
+                        case 21:
+                            if (c == '\'')
+                            {
+                                auxiliar += c;
+                                columna++;
+                                if (auxiliar.Length == 3)
+                                {
+                                    TokenControlador.Instancia.agregarToken(fila, (columna - auxiliar.Length), auxiliar, "Character");
+                                }
+                                else
+                                {
+                                    TokenControlador.Instancia.agregarError(fila, (columna - auxiliar.Length), auxiliar, "Desconocido");
+                                }
                                 opcion = 0;
                                 auxiliar = "";
                             }

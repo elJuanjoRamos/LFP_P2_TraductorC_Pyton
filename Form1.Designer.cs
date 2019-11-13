@@ -28,13 +28,13 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.textAnalizar = new System.Windows.Forms.RichTextBox();
+            this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.consolaTexto = new System.Windows.Forms.RichTextBox();
             this.materialLabel1 = new MaterialSkin.Controls.MaterialLabel();
             this.materialLabel2 = new MaterialSkin.Controls.MaterialLabel();
             this.analizar = new MaterialSkin.Controls.MaterialFlatButton();
             this.traduccion = new MaterialSkin.Controls.MaterialFlatButton();
-            this.richTraduccion = new System.Windows.Forms.RichTextBox();
             this.materialLabel3 = new MaterialSkin.Controls.MaterialLabel();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.archivoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -49,16 +49,12 @@
             this.tablaDeSimbolosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.limpiaDocumentosRecientesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ayudaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.textAnalizar = new FastColoredTextBoxNS.FastColoredTextBox();
+            this.richTraduccion = new System.Windows.Forms.RichTextBox();
+            this.graficaDeVectoresToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.textAnalizar)).BeginInit();
             this.SuspendLayout();
-            // 
-            // textAnalizar
-            // 
-            this.textAnalizar.Location = new System.Drawing.Point(34, 207);
-            this.textAnalizar.Name = "textAnalizar";
-            this.textAnalizar.Size = new System.Drawing.Size(862, 390);
-            this.textAnalizar.TabIndex = 0;
-            this.textAnalizar.Text = "";
             // 
             // consolaTexto
             // 
@@ -99,7 +95,7 @@
             this.analizar.AutoSize = true;
             this.analizar.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.analizar.Depth = 0;
-            this.analizar.Location = new System.Drawing.Point(742, 156);
+            this.analizar.Location = new System.Drawing.Point(801, 162);
             this.analizar.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.analizar.MouseState = MaterialSkin.MouseState.HOVER;
             this.analizar.Name = "analizar";
@@ -126,21 +122,13 @@
             this.traduccion.UseVisualStyleBackColor = true;
             this.traduccion.Click += new System.EventHandler(this.MaterialFlatButton1_Click);
             // 
-            // richTraduccion
-            // 
-            this.richTraduccion.Location = new System.Drawing.Point(922, 207);
-            this.richTraduccion.Name = "richTraduccion";
-            this.richTraduccion.Size = new System.Drawing.Size(523, 601);
-            this.richTraduccion.TabIndex = 6;
-            this.richTraduccion.Text = "";
-            // 
             // materialLabel3
             // 
             this.materialLabel3.AutoSize = true;
             this.materialLabel3.Depth = 0;
             this.materialLabel3.Font = new System.Drawing.Font("Roboto", 11F);
             this.materialLabel3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.materialLabel3.Location = new System.Drawing.Point(918, 168);
+            this.materialLabel3.Location = new System.Drawing.Point(918, 167);
             this.materialLabel3.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialLabel3.Name = "materialLabel3";
             this.materialLabel3.Size = new System.Drawing.Size(104, 24);
@@ -175,21 +163,21 @@
             // abrirToolStripMenuItem
             // 
             this.abrirToolStripMenuItem.Name = "abrirToolStripMenuItem";
-            this.abrirToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.abrirToolStripMenuItem.Size = new System.Drawing.Size(145, 26);
             this.abrirToolStripMenuItem.Text = "Abrir";
             this.abrirToolStripMenuItem.Click += new System.EventHandler(this.AbrirToolStripMenuItem_Click);
             // 
             // guardarToolStripMenuItem
             // 
             this.guardarToolStripMenuItem.Name = "guardarToolStripMenuItem";
-            this.guardarToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.guardarToolStripMenuItem.Size = new System.Drawing.Size(145, 26);
             this.guardarToolStripMenuItem.Text = "Guardar";
             this.guardarToolStripMenuItem.Click += new System.EventHandler(this.GuardarToolStripMenuItem_Click);
             // 
             // salirToolStripMenuItem
             // 
             this.salirToolStripMenuItem.Name = "salirToolStripMenuItem";
-            this.salirToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.salirToolStripMenuItem.Size = new System.Drawing.Size(145, 26);
             this.salirToolStripMenuItem.Text = "Salir";
             // 
             // documentoToolStripMenuItem
@@ -207,7 +195,8 @@
             this.reporteTokensToolStripMenuItem,
             this.reporteErroresLexicosToolStripMenuItem,
             this.reporteToolStripMenuItem,
-            this.tablaDeSimbolosToolStripMenuItem});
+            this.tablaDeSimbolosToolStripMenuItem,
+            this.graficaDeVectoresToolStripMenuItem});
             this.reportesToolStripMenuItem.Name = "reportesToolStripMenuItem";
             this.reportesToolStripMenuItem.Size = new System.Drawing.Size(292, 26);
             this.reportesToolStripMenuItem.Text = "Reportes";
@@ -253,19 +242,65 @@
             this.ayudaToolStripMenuItem.Size = new System.Drawing.Size(65, 26);
             this.ayudaToolStripMenuItem.Text = "Ayuda";
             // 
+            // textAnalizar
+            // 
+            this.textAnalizar.AutoCompleteBracketsList = new char[] {
+        '(',
+        ')',
+        '{',
+        '}',
+        '[',
+        ']',
+        '\"',
+        '\"',
+        '\'',
+        '\''};
+            this.textAnalizar.AutoIndentCharsPatterns = "^\\s*[\\w\\.]+(\\s\\w+)?\\s*(?<range>=)\\s*(?<range>[^;=]+);\r\n^\\s*(case|default)\\s*[^:]*" +
+    "(?<range>:)\\s*(?<range>[^;]+);";
+            this.textAnalizar.AutoScrollMinSize = new System.Drawing.Size(31, 18);
+            this.textAnalizar.BackBrush = null;
+            this.textAnalizar.CharHeight = 18;
+            this.textAnalizar.CharWidth = 10;
+            this.textAnalizar.Cursor = System.Windows.Forms.Cursors.IBeam;
+            this.textAnalizar.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
+            this.textAnalizar.IsReplaceMode = false;
+            this.textAnalizar.Location = new System.Drawing.Point(34, 207);
+            this.textAnalizar.Name = "textAnalizar";
+            this.textAnalizar.Paddings = new System.Windows.Forms.Padding(0);
+            this.textAnalizar.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
+            this.textAnalizar.ServiceColors = ((FastColoredTextBoxNS.ServiceColors)(resources.GetObject("textAnalizar.ServiceColors")));
+            this.textAnalizar.Size = new System.Drawing.Size(862, 405);
+            this.textAnalizar.TabIndex = 9;
+            this.textAnalizar.Zoom = 100;
+            // 
+            // richTraduccion
+            // 
+            this.richTraduccion.Location = new System.Drawing.Point(922, 207);
+            this.richTraduccion.Name = "richTraduccion";
+            this.richTraduccion.Size = new System.Drawing.Size(557, 594);
+            this.richTraduccion.TabIndex = 10;
+            this.richTraduccion.Text = "";
+            // 
+            // graficaDeVectoresToolStripMenuItem
+            // 
+            this.graficaDeVectoresToolStripMenuItem.Name = "graficaDeVectoresToolStripMenuItem";
+            this.graficaDeVectoresToolStripMenuItem.Size = new System.Drawing.Size(269, 26);
+            this.graficaDeVectoresToolStripMenuItem.Text = "Grafica de Vectores";
+            this.graficaDeVectoresToolStripMenuItem.Click += new System.EventHandler(this.GraficaDeVectoresToolStripMenuItem_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1519, 863);
-            this.Controls.Add(this.materialLabel3);
             this.Controls.Add(this.richTraduccion);
+            this.Controls.Add(this.textAnalizar);
+            this.Controls.Add(this.materialLabel3);
             this.Controls.Add(this.traduccion);
             this.Controls.Add(this.analizar);
             this.Controls.Add(this.materialLabel2);
             this.Controls.Add(this.materialLabel1);
             this.Controls.Add(this.consolaTexto);
-            this.Controls.Add(this.textAnalizar);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "Form1";
@@ -273,20 +308,18 @@
             this.Load += new System.EventHandler(this.Form1_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.textAnalizar)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
 
         #endregion
-
-        private System.Windows.Forms.RichTextBox textAnalizar;
         private System.Windows.Forms.RichTextBox consolaTexto;
         private MaterialSkin.Controls.MaterialLabel materialLabel1;
         private MaterialSkin.Controls.MaterialLabel materialLabel2;
         private MaterialSkin.Controls.MaterialFlatButton analizar;
         private MaterialSkin.Controls.MaterialFlatButton traduccion;
-        private System.Windows.Forms.RichTextBox richTraduccion;
         private MaterialSkin.Controls.MaterialLabel materialLabel3;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem archivoToolStripMenuItem;
@@ -301,6 +334,9 @@
         private System.Windows.Forms.ToolStripMenuItem tablaDeSimbolosToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem limpiaDocumentosRecientesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem ayudaToolStripMenuItem;
+        private FastColoredTextBoxNS.FastColoredTextBox textAnalizar;
+        private System.Windows.Forms.RichTextBox richTraduccion;
+        private System.Windows.Forms.ToolStripMenuItem graficaDeVectoresToolStripMenuItem;
     }
 }
 
