@@ -85,9 +85,9 @@ namespace LFP_P2_TraductorC_Pyton.Controladores
 
                     declFor = "for ";
 
-                    
+
                     //llenarBandera("for");
-                    for (int j = i + 3; j < listaTokens.Count; j++)
+                    /*for (int j = i + 3; j < listaTokens.Count; j++)
                     {
                         flagToken = (Token)listaTokens[j];
                         if (flagToken.Lexema.Equals(";"))
@@ -128,7 +128,18 @@ namespace LFP_P2_TraductorC_Pyton.Controladores
                     string[] cont = declFor.Split('=');
 
                     TablaTraduccionControlador.Instancia.agregar(tabs + cont[0] + " in range(" + cont[1] + "," + condFor + ")", "for");
-                    /*
+                    if (finalFor.Contains("++"))
+                        {
+
+                            finalFor = finalFor.Replace("++", "+=1");
+                        }
+                        else
+                        {
+                            finalFor = finalFor.Replace("--", "-= 1");
+                        }
+                        TablaTraduccionControlador.Instancia.agregar(tabs + " "+finalFor, "for");
+                    */
+
                     //llenarBandera("for");
                     inicioDeclaracion = flagToken.Descripcion;
                     Parea(flagToken.Descripcion);
@@ -185,7 +196,16 @@ namespace LFP_P2_TraductorC_Pyton.Controladores
                             Parea(flagToken.Descripcion);
                         }
                     }
-                    */
+                    if (finalFor.Contains("++"))
+                    {
+
+                        finalFor = finalFor.Replace("++", "+=1");
+                    }
+                    else
+                    {
+                        finalFor = finalFor.Replace("--", "-= 1");
+                    }
+                    TablaTraduccionControlador.Instancia.agregar(tabs + " " + finalFor, "for");
                 }
                 #endregion
 
@@ -490,20 +510,7 @@ namespace LFP_P2_TraductorC_Pyton.Controladores
                 }
                 else if (flagToken.Descripcion.Equals("S_Llave_Derecha"))
                 {
-                    //Envia hasta el final el aumento del for
-                    /*if (inicioDeclaracion.Equals("PR_for") )
-                    {
-                        if (finalFor.Contains("++"))
-                        {
 
-                            finalFor = finalFor.Replace("++", "+=1");
-                        }
-                        else
-                        {
-                            finalFor = finalFor.Replace("--", "-= 1");
-                        }
-                        TablaTraduccionControlador.Instancia.agregar(tabs + " "+finalFor, "for");
-                    }*/
                     variableSwitch = "";
                     tokenAnterior = "";
                     ambito--;
