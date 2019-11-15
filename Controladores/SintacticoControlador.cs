@@ -28,7 +28,7 @@ namespace LFP_P2_TraductorC_Pyton.Controladores
         }
 
         public ArrayList ArrayListSintactico { get => arrayListSintactico; set => arrayListSintactico = value; }
-
+        
         public void agregarError(string lexema, string descripcion, int fila, int columna)
         {
             Sintactico token = new Sintactico(idSintactico, lexema, descripcion, columna, fila);

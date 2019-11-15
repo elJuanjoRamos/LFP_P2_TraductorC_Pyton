@@ -107,6 +107,7 @@ namespace LFP_P2_TraductorC_Pyton.AnalizadorSint
                 else if (preAnalisis.Descripcion.Equals("PR_static"))
                 {
                     MetodoPrincipal();
+
                 }
                 else if (preAnalisis.Descripcion.Equals("ComentarioLinea"))
                 {
@@ -294,6 +295,7 @@ namespace LFP_P2_TraductorC_Pyton.AnalizadorSint
             PuntoComa();
             //LISTA DECLARACION
             ListaDeclaracion();
+
         }
 
         public void OpcAsignacionArreglo()

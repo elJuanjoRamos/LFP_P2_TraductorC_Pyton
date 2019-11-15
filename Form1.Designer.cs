@@ -31,8 +31,6 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.consolaTexto = new System.Windows.Forms.RichTextBox();
-            this.analizar = new MaterialSkin.Controls.MaterialFlatButton();
-            this.traduccion = new MaterialSkin.Controls.MaterialFlatButton();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.archivoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.abrirToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -45,56 +43,30 @@
             this.reporteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tablaDeSimbolosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.graficaDeVectoresToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.guardarTraduccionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.limpiaDocumentosRecientesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.analizarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ayudaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.richTraduccion = new System.Windows.Forms.RichTextBox();
             this.textAnalizar = new FastColoredTextBoxNS.FastColoredTextBox();
-            this.materialLabel1 = new MaterialSkin.Controls.MaterialLabel();
-            this.materialLabel3 = new MaterialSkin.Controls.MaterialLabel();
-            this.materialLabel2 = new MaterialSkin.Controls.MaterialLabel();
+            this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.acercaDeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.textAnalizar)).BeginInit();
+            this.tabControl1.SuspendLayout();
+            this.tabPage2.SuspendLayout();
             this.SuspendLayout();
             // 
             // consolaTexto
             // 
-            this.consolaTexto.Location = new System.Drawing.Point(34, 642);
+            this.consolaTexto.BackColor = System.Drawing.SystemColors.MenuBar;
+            this.consolaTexto.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.consolaTexto.Location = new System.Drawing.Point(12, 821);
             this.consolaTexto.Name = "consolaTexto";
-            this.consolaTexto.Size = new System.Drawing.Size(862, 159);
+            this.consolaTexto.Size = new System.Drawing.Size(1442, 209);
             this.consolaTexto.TabIndex = 1;
             this.consolaTexto.Text = "";
-            // 
-            // analizar
-            // 
-            this.analizar.AutoSize = true;
-            this.analizar.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.analizar.Depth = 0;
-            this.analizar.Location = new System.Drawing.Point(801, 162);
-            this.analizar.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
-            this.analizar.MouseState = MaterialSkin.MouseState.HOVER;
-            this.analizar.Name = "analizar";
-            this.analizar.Primary = false;
-            this.analizar.Size = new System.Drawing.Size(95, 36);
-            this.analizar.TabIndex = 4;
-            this.analizar.Text = "Analizar";
-            this.analizar.UseVisualStyleBackColor = true;
-            this.analizar.Click += new System.EventHandler(this.Analizar_Click);
-            // 
-            // traduccion
-            // 
-            this.traduccion.AutoSize = true;
-            this.traduccion.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.traduccion.Depth = 0;
-            this.traduccion.Location = new System.Drawing.Point(1232, 156);
-            this.traduccion.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
-            this.traduccion.MouseState = MaterialSkin.MouseState.HOVER;
-            this.traduccion.Name = "traduccion";
-            this.traduccion.Primary = false;
-            this.traduccion.Size = new System.Drawing.Size(202, 36);
-            this.traduccion.TabIndex = 5;
-            this.traduccion.Text = "Guardar Traduccion";
-            this.traduccion.UseVisualStyleBackColor = true;
-            this.traduccion.Click += new System.EventHandler(this.MaterialFlatButton1_Click);
             // 
             // menuStrip1
             // 
@@ -104,7 +76,7 @@
             this.archivoToolStripMenuItem,
             this.documentoToolStripMenuItem,
             this.ayudaToolStripMenuItem});
-            this.menuStrip1.Location = new System.Drawing.Point(9, 81);
+            this.menuStrip1.Location = new System.Drawing.Point(9, 97);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
             this.menuStrip1.Size = new System.Drawing.Size(247, 28);
@@ -144,6 +116,7 @@
             // documentoToolStripMenuItem
             // 
             this.documentoToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.analizarToolStripMenuItem,
             this.reportesToolStripMenuItem,
             this.limpiaDocumentosRecientesToolStripMenuItem});
             this.documentoToolStripMenuItem.Name = "documentoToolStripMenuItem";
@@ -157,7 +130,8 @@
             this.reporteErroresLexicosToolStripMenuItem,
             this.reporteToolStripMenuItem,
             this.tablaDeSimbolosToolStripMenuItem,
-            this.graficaDeVectoresToolStripMenuItem});
+            this.graficaDeVectoresToolStripMenuItem,
+            this.guardarTraduccionToolStripMenuItem});
             this.reportesToolStripMenuItem.Name = "reportesToolStripMenuItem";
             this.reportesToolStripMenuItem.Size = new System.Drawing.Size(292, 26);
             this.reportesToolStripMenuItem.Text = "Reportes";
@@ -197,6 +171,13 @@
             this.graficaDeVectoresToolStripMenuItem.Text = "Grafica de Vectores";
             this.graficaDeVectoresToolStripMenuItem.Click += new System.EventHandler(this.GraficaDeVectoresToolStripMenuItem_Click);
             // 
+            // guardarTraduccionToolStripMenuItem
+            // 
+            this.guardarTraduccionToolStripMenuItem.Name = "guardarTraduccionToolStripMenuItem";
+            this.guardarTraduccionToolStripMenuItem.Size = new System.Drawing.Size(269, 26);
+            this.guardarTraduccionToolStripMenuItem.Text = "Guardar Traduccion";
+            this.guardarTraduccionToolStripMenuItem.Click += new System.EventHandler(this.GuardarTraduccionToolStripMenuItem_Click);
+            // 
             // limpiaDocumentosRecientesToolStripMenuItem
             // 
             this.limpiaDocumentosRecientesToolStripMenuItem.Name = "limpiaDocumentosRecientesToolStripMenuItem";
@@ -204,17 +185,28 @@
             this.limpiaDocumentosRecientesToolStripMenuItem.Text = "Limpia Documentos Recientes";
             this.limpiaDocumentosRecientesToolStripMenuItem.Click += new System.EventHandler(this.LimpiaDocumentosRecientesToolStripMenuItem_Click);
             // 
+            // analizarToolStripMenuItem
+            // 
+            this.analizarToolStripMenuItem.Name = "analizarToolStripMenuItem";
+            this.analizarToolStripMenuItem.Size = new System.Drawing.Size(292, 26);
+            this.analizarToolStripMenuItem.Text = "Analizar";
+            this.analizarToolStripMenuItem.Click += new System.EventHandler(this.AnalizarToolStripMenuItem_Click);
+            // 
             // ayudaToolStripMenuItem
             // 
+            this.ayudaToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.acercaDeToolStripMenuItem});
             this.ayudaToolStripMenuItem.Name = "ayudaToolStripMenuItem";
             this.ayudaToolStripMenuItem.Size = new System.Drawing.Size(65, 24);
             this.ayudaToolStripMenuItem.Text = "Ayuda";
             // 
             // richTraduccion
             // 
-            this.richTraduccion.Location = new System.Drawing.Point(922, 207);
+            this.richTraduccion.BackColor = System.Drawing.SystemColors.Menu;
+            this.richTraduccion.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.richTraduccion.Location = new System.Drawing.Point(1460, 180);
             this.richTraduccion.Name = "richTraduccion";
-            this.richTraduccion.Size = new System.Drawing.Size(557, 594);
+            this.richTraduccion.Size = new System.Drawing.Size(557, 850);
             this.richTraduccion.TabIndex = 10;
             this.richTraduccion.Text = "";
             // 
@@ -241,75 +233,61 @@
             this.textAnalizar.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
             this.textAnalizar.Font = new System.Drawing.Font("Courier New", 9.75F);
             this.textAnalizar.IsReplaceMode = false;
-            this.textAnalizar.Location = new System.Drawing.Point(34, 207);
+            this.textAnalizar.Location = new System.Drawing.Point(6, 6);
             this.textAnalizar.Name = "textAnalizar";
             this.textAnalizar.Paddings = new System.Windows.Forms.Padding(0);
             this.textAnalizar.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
             this.textAnalizar.ServiceColors = ((FastColoredTextBoxNS.ServiceColors)(resources.GetObject("textAnalizar.ServiceColors")));
-            this.textAnalizar.Size = new System.Drawing.Size(862, 405);
+            this.textAnalizar.Size = new System.Drawing.Size(1425, 619);
             this.textAnalizar.TabIndex = 9;
             this.textAnalizar.Zoom = 100;
             // 
-            // materialLabel1
+            // tabControl1
             // 
-            this.materialLabel1.AutoSize = true;
-            this.materialLabel1.Depth = 0;
-            this.materialLabel1.Font = new System.Drawing.Font("Roboto", 11F);
-            this.materialLabel1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.materialLabel1.Location = new System.Drawing.Point(30, 615);
-            this.materialLabel1.MouseState = MaterialSkin.MouseState.HOVER;
-            this.materialLabel1.Name = "materialLabel1";
-            this.materialLabel1.Size = new System.Drawing.Size(79, 24);
-            this.materialLabel1.TabIndex = 2;
-            this.materialLabel1.Text = "Consola";
+            this.tabControl1.Controls.Add(this.tabPage2);
+            this.tabControl1.Location = new System.Drawing.Point(9, 155);
+            this.tabControl1.Name = "tabControl1";
+            this.tabControl1.SelectedIndex = 0;
+            this.tabControl1.Size = new System.Drawing.Size(1445, 660);
+            this.tabControl1.TabIndex = 11;
             // 
-            // materialLabel3
+            // tabPage2
             // 
-            this.materialLabel3.AutoSize = true;
-            this.materialLabel3.Depth = 0;
-            this.materialLabel3.Font = new System.Drawing.Font("Roboto", 11F);
-            this.materialLabel3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.materialLabel3.Location = new System.Drawing.Point(918, 167);
-            this.materialLabel3.MouseState = MaterialSkin.MouseState.HOVER;
-            this.materialLabel3.Name = "materialLabel3";
-            this.materialLabel3.Size = new System.Drawing.Size(104, 24);
-            this.materialLabel3.TabIndex = 7;
-            this.materialLabel3.Text = "Traduccion";
+            this.tabPage2.Controls.Add(this.textAnalizar);
+            this.tabPage2.Location = new System.Drawing.Point(4, 25);
+            this.tabPage2.Name = "tabPage2";
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage2.Size = new System.Drawing.Size(1437, 631);
+            this.tabPage2.TabIndex = 1;
+            this.tabPage2.Text = "Pestaña 1";
             // 
-            // materialLabel2
+            // acercaDeToolStripMenuItem
             // 
-            this.materialLabel2.AutoSize = true;
-            this.materialLabel2.Depth = 0;
-            this.materialLabel2.Font = new System.Drawing.Font("Roboto", 11F);
-            this.materialLabel2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.materialLabel2.Location = new System.Drawing.Point(30, 168);
-            this.materialLabel2.MouseState = MaterialSkin.MouseState.HOVER;
-            this.materialLabel2.Name = "materialLabel2";
-            this.materialLabel2.Size = new System.Drawing.Size(57, 24);
-            this.materialLabel2.TabIndex = 3;
-            this.materialLabel2.Text = "Texto";
+            this.acercaDeToolStripMenuItem.Name = "acercaDeToolStripMenuItem";
+            this.acercaDeToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.acercaDeToolStripMenuItem.Text = "Acerca De";
+            this.acercaDeToolStripMenuItem.Click += new System.EventHandler(this.AcercaDeToolStripMenuItem_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.ClientSize = new System.Drawing.Size(1920, 1055);
+            this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.richTraduccion);
-            this.Controls.Add(this.textAnalizar);
-            this.Controls.Add(this.materialLabel3);
-            this.Controls.Add(this.traduccion);
-            this.Controls.Add(this.analizar);
-            this.Controls.Add(this.materialLabel2);
-            this.Controls.Add(this.materialLabel1);
             this.Controls.Add(this.consolaTexto);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "Form1";
             this.Text = "Form1";
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.Form1_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.textAnalizar)).EndInit();
+            this.tabControl1.ResumeLayout(false);
+            this.tabPage2.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -317,8 +295,6 @@
 
         #endregion
         private System.Windows.Forms.RichTextBox consolaTexto;
-        private MaterialSkin.Controls.MaterialFlatButton analizar;
-        private MaterialSkin.Controls.MaterialFlatButton traduccion;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem archivoToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem abrirToolStripMenuItem;
@@ -335,9 +311,11 @@
         private System.Windows.Forms.RichTextBox richTraduccion;
         private System.Windows.Forms.ToolStripMenuItem graficaDeVectoresToolStripMenuItem;
         private FastColoredTextBoxNS.FastColoredTextBox textAnalizar;
-        private MaterialSkin.Controls.MaterialLabel materialLabel1;
-        private MaterialSkin.Controls.MaterialLabel materialLabel3;
-        private MaterialSkin.Controls.MaterialLabel materialLabel2;
+        private System.Windows.Forms.ToolStripMenuItem guardarTraduccionToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem analizarToolStripMenuItem;
+        private System.Windows.Forms.TabControl tabControl1;
+        private System.Windows.Forms.TabPage tabPage2;
+        private System.Windows.Forms.ToolStripMenuItem acercaDeToolStripMenuItem;
     }
 }
 

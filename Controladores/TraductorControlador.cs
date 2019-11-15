@@ -70,13 +70,66 @@ namespace LFP_P2_TraductorC_Pyton.Controladores
         {
             string[] reservadasVariable = { "PR_int", "PR_float", "PR_char", "PR_bool", "PR_boolean", "PR_double",  "PR_string"};
             tipoVariable = "";
-            for (int i = 0; i < listaTokens.Count; i++)
+            for (int i = 13; i < listaTokens.Count-2; i++)
             {
                 flagToken = (Token)listaTokens[i];
 
                 #region TRADUCCION FOR
-                if (flagToken.Descripcion.Equals("PR_for"))
+                if (flagToken.Descripcion.Equals("PR_for") )
                 {
+                    inicioDeclaracion = flagToken.Descripcion;
+                    declFor = "";
+                    condFor = "";
+                    finalFor = "";
+
+
+                    declFor = "for ";
+
+                    
+                    //llenarBandera("for");
+                    for (int j = i + 3; j < listaTokens.Count; j++)
+                    {
+                        flagToken = (Token)listaTokens[j];
+                        if (flagToken.Lexema.Equals(";"))
+                        {
+                            tokenInicio = "";
+                            break;
+                        }
+                        else
+                        {
+                            declFor = declFor + flagToken.Lexema;
+                        }
+                    }
+
+                    for (int j = i + 7; j < listaTokens.Count; j++)
+                    {
+                        flagToken = (Token)listaTokens[j];
+                        if (flagToken.Descripcion.Equals("Digito"))
+                        {
+                            condFor = condFor +  flagToken.Lexema;
+                            break;
+                        }
+                    }
+
+                    for (int j = i + 11; j < listaTokens.Count; j++)
+                    {
+                        flagToken = (Token)listaTokens[j];
+                        if (flagToken.Lexema.Equals(")"))
+                        {
+                            i = i + 11;
+                            break;
+                        }
+                        else
+                        {
+                            finalFor = finalFor + flagToken.Lexema;
+                        }
+                    }
+
+                    string[] cont = declFor.Split('=');
+
+                    TablaTraduccionControlador.Instancia.agregar(tabs + cont[0] + " in range(" + cont[1] + "," + condFor + ")", "for");
+                    /*
+                    //llenarBandera("for");
                     inicioDeclaracion = flagToken.Descripcion;
                     Parea(flagToken.Descripcion);
                     declFor = "";
@@ -96,23 +149,23 @@ namespace LFP_P2_TraductorC_Pyton.Controladores
                         }
                         else
                         {
-                            declFor = declFor + " " + flagToken.Lexema;
+                            declFor = declFor + flagToken.Lexema;
                             Parea(flagToken.Descripcion);
                         }
                     }
 
-                    for (int j = i+7; j < listaTokens.Count; j++)
+                    for (int j = i + 7; j < listaTokens.Count; j++)
                     {
                         flagToken = (Token)listaTokens[j];
                         if (flagToken.Lexema.Equals(";"))
                         {
                             Parea(flagToken.Descripcion);
-                            TablaTraduccionControlador.Instancia.agregar(tabs + "while "+condFor + ":", "for");
+                            TablaTraduccionControlador.Instancia.agregar(tabs + "while " + condFor + ":", "for");
                             break;
                         }
                         else
                         {
-                            condFor = condFor + " " + flagToken.Lexema;
+                            condFor = condFor + flagToken.Lexema;
                             Parea(flagToken.Descripcion);
                         }
                     }
@@ -132,6 +185,7 @@ namespace LFP_P2_TraductorC_Pyton.Controladores
                             Parea(flagToken.Descripcion);
                         }
                     }
+                    */
                 }
                 #endregion
 
@@ -140,9 +194,9 @@ namespace LFP_P2_TraductorC_Pyton.Controladores
                 {
 
                     Parea(flagToken.Descripcion);
-                    llenarBandera("variable");
-                    if (tipoVariable.Equals("")){tipoVariable = flagToken.Lexema; }
-                    
+                    //llenarBandera("variable");
+                    if (tipoVariable.Equals("")) { tipoVariable = flagToken.Lexema; }
+
                     //SE VA A VARIABLE
 
                     if (flagToken.Descripcion.Equals("Identificador"))
@@ -157,7 +211,8 @@ namespace LFP_P2_TraductorC_Pyton.Controladores
                                 if (((Token)listaTokens[j - 1]).Descripcion.Equals("Identificador") && ((Token)listaTokens[j - 2]).Descripcion.Contains("PR_"))
                                 {
                                     EnviarTablaSimbolo(tabs + ((Token)listaTokens[j - 1]).Lexema, tipoVariable, "");
-                                }else if (cadenaVariable.Contains(","))
+                                }
+                                else if (cadenaVariable.Contains(","))
                                 {
                                     string[] words = cadenaVariable.Split(',');
                                     for (int n = 0; n < words.Length; n++)
@@ -165,7 +220,7 @@ namespace LFP_P2_TraductorC_Pyton.Controladores
                                         if (!words[n].Contains("="))
                                         {
                                             EnviarTablaSimbolo(tabs + words[n], tipoVariable, "");
-                                            
+
                                         }
                                         else
                                         {
@@ -195,21 +250,18 @@ namespace LFP_P2_TraductorC_Pyton.Controladores
                     //SE VA A ARREGLO
                     else if (flagToken.Lexema.Equals("["))
                     {
-
-                        #region TABLA SIMBOLO 
-
-
-                        #endregion
-
                         Parea(flagToken.Descripcion);
-                        for (int j = i+2; j < listaTokens.Count; j++)
+                        Token temp = (Token)listaTokens[i + 2];
+                        for (int j = i + 2; j < listaTokens.Count; j++)
                         {
-                            Token temp = (Token)listaTokens[j];
+                            temp = (Token)listaTokens[j];
                             if (temp.Lexema.Equals(";"))
                             {
                                 Parea(temp.Descripcion);
                                 cadenaVariable = cadenaVariable.Replace("{", "[");
                                 cadenaVariable = cadenaVariable.Replace("}", "]");
+
+                                Console.WriteLine(cadenaVariable);
                                 TablaTraduccionControlador.Instancia.agregar(tabs + cadenaVariable, "array");
                                 string[] partesArreglo = cadenaVariable.Split('=');
                                 EnviarTablaSimbolo(partesArreglo[0], "array", partesArreglo[1]);
@@ -227,11 +279,11 @@ namespace LFP_P2_TraductorC_Pyton.Controladores
                                 else
                                 {
                                     cadenaVariable = cadenaVariable + temp.Lexema;
+                                    Console.WriteLine(cadenaVariable);
                                     Parea(temp.Descripcion);
                                 }
                             }
                         }
-
                     }
                 }
                 #endregion
@@ -243,7 +295,7 @@ namespace LFP_P2_TraductorC_Pyton.Controladores
                     tokenInicio = "if ";
                     vieneFor = false;
                     Parea(flagToken.Descripcion);
-                    for (int j = i+2; j < listaTokens.Count; j++)
+                    for (int j = i + 2; j < listaTokens.Count; j++)
                     {
                         flagToken = (Token)listaTokens[j];
                         if (flagToken.Lexema.Equals(")"))
@@ -256,7 +308,7 @@ namespace LFP_P2_TraductorC_Pyton.Controladores
                         }
                         else
                         {
-                            tokenInicio = tokenInicio +  flagToken.Lexema;
+                            tokenInicio = tokenInicio + flagToken.Lexema;
                             Parea(flagToken.Descripcion);
                         }
                     }
@@ -287,7 +339,7 @@ namespace LFP_P2_TraductorC_Pyton.Controladores
                         if (flagToken.Lexema.Equals(")"))
                         {
                             Parea(flagToken.Descripcion);
-                            TablaTraduccionControlador.Instancia.agregar(tabs + tokenInicio+":", "while");
+                            TablaTraduccionControlador.Instancia.agregar(tabs + tokenInicio + ":", "while");
                             tokenInicio = "";
                             i = j;
                             break;
@@ -356,13 +408,13 @@ namespace LFP_P2_TraductorC_Pyton.Controladores
                     ambito--;
                     agregarTabulaciones(ambito);
                     Parea(flagToken.Descripcion);
-                    variableSwitch = ((Token)listaTokens[i+2]).Lexema;
+                    variableSwitch = ((Token)listaTokens[i + 2]).Lexema;
                 }
                 else if (flagToken.Descripcion.Equals("PR_case"))
                 {
                     tokenInicio = "";
                     Parea(flagToken.Descripcion);
-                    for (int m = i+1; m < listaTokens.Count; m++)
+                    for (int m = i + 1; m < listaTokens.Count; m++)
                     {
                         flagToken = (Token)listaTokens[m];
                         if (flagToken.Lexema.Equals(":"))
@@ -370,11 +422,11 @@ namespace LFP_P2_TraductorC_Pyton.Controladores
                             Parea(flagToken.Descripcion);
                             if (iteracionesSwitch == 0)
                             {
-                                TablaTraduccionControlador.Instancia.agregar(tabs + "if " + variableSwitch + "=="  + tokenInicio+":", "switch");
+                                TablaTraduccionControlador.Instancia.agregar(tabs + "if " + variableSwitch + "==" + tokenInicio + ":", "switch");
                             }
                             else
                             {
-                                TablaTraduccionControlador.Instancia.agregar(tabs + "elif " + variableSwitch + "=="+ tokenInicio + ":", "switch");
+                                TablaTraduccionControlador.Instancia.agregar(tabs + "elif " + variableSwitch + "==" + tokenInicio + ":", "switch");
                             }
                             ambito++;
                             i = m;
@@ -439,9 +491,8 @@ namespace LFP_P2_TraductorC_Pyton.Controladores
                 else if (flagToken.Descripcion.Equals("S_Llave_Derecha"))
                 {
                     //Envia hasta el final el aumento del for
-                    if (inicioDeclaracion.Equals("PR_for") )
+                    /*if (inicioDeclaracion.Equals("PR_for") )
                     {
-                        Console.WriteLine(finalFor);
                         if (finalFor.Contains("++"))
                         {
 
@@ -452,7 +503,7 @@ namespace LFP_P2_TraductorC_Pyton.Controladores
                             finalFor = finalFor.Replace("--", "-= 1");
                         }
                         TablaTraduccionControlador.Instancia.agregar(tabs + " "+finalFor, "for");
-                    }
+                    }*/
                     variableSwitch = "";
                     tokenAnterior = "";
                     ambito--;

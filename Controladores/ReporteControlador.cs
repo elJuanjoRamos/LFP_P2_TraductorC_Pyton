@@ -136,14 +136,10 @@ namespace LFP_P2_TraductorC_Pyton.Controladores
             "    <title>" + title + "</title>\n" +
             "</head>\n" +
             "<body>\n" +
-            "    <nav class=\"navbar navbar-dark bg-dark\">\n" +
+            "    <nav class=\"navbar navbar-light bg-light\">\n" +
             "    <a class=\"navbar-brand\" href=\"#\">\n" +
-            "        <img src=\"https://www.usac.edu.gt/g/escudo10.png\" width=\"30\" height=\"30\" class=\"d-inline-block align-top\" alt=\"\">\n" +
             "        Lenguajes Formales y de Programación\n" +
             "    </a>\n" +
-            "    <form class=\"form-inline my-2 my-lg-0\">\n" +
-            "      <input class=\"form-control mr-sm-2\" id=\"search\" type=\"search\" placeholder=\"Search\" aria-label=\"Search\">\n" +
-            "    </form>\n" +
             "    </nav>\n" +
             "    <div class=\"container\">\n" +//DateTime.Now.ToString("G");
             "    <div class=\"jumbotron jumbotron-fluid\">\n" +
@@ -153,8 +149,8 @@ namespace LFP_P2_TraductorC_Pyton.Controladores
             "        <p class=\"lead\"><strong>" + DateTime.Now.ToString("G") + "</strong></p>\n" +
             "    </div>\n" +
             "    </div>\n" +
-            "    <table class=\"table\" id=\"mytable\">\n" +
-            "    <thead class=\"thead-dark\">\n" +
+            "    <table id=\"example\" class=\"table table-striped table - bordered\" style=\"width: 100 % \"\n" +
+            "    <thead\n" +
             "        <tr>\n" +
             thead +
             "        </tr>\n" +
@@ -168,18 +164,9 @@ namespace LFP_P2_TraductorC_Pyton.Controladores
             "    <script src=\"https://code.jquery.com/jquery-3.3.1.slim.min.js\" integrity=\"sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo\" crossorigin=\"anonymous\"></script>\n" +
             "    <script>\n" +
             "    // Write on keyup event of keyword input element\n" +
-            "    $(document).ready(function(){\n" +
-            "    $(\"#search\").keyup(function(){\n" +
-            "    _this = this;\n" +
-            "    // Show only matching TR, hide rest of them\n" +
-            "    $.each($(\"#mytable tbody tr\"), function() {\n" +
-            "    if($(this).text().toLowerCase().indexOf($(_this).val().toLowerCase()) === -1)\n" +
-            "    $(this).hide();\n" +
-            "    else\n" +
-            "    $(this).show();\n" +
-            "    });\n" +
-            "    });\n" +
-            "    });\n" +
+            "    $(document).ready(function() {\n"+
+            "       $('#example').DataTable();\n"+
+            "      } );\n" +
             "    </script>\n" +
             "    <script src=\"https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js\" integrity=\"sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1\" crossorigin=\"anonymous\"></script>\n" +
             "    <script src=\"https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js\" integrity=\"sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM\" crossorigin=\"anonymous\"></script>\n" +
